@@ -18,6 +18,16 @@ def detect(template, target) -> dict:
     return result
 
 
+def cal_location(result_dict: dict):
+    """ analyse result and get its position """
+    data = result_dict['data'][0]
+    sim = data['max_val']
+    target_point = data['max_loc']
+    assert sim > config.CV_THRESHOLD, 'target point not found'
+    logger.info('sim == {}, found it on ({}, {})'.format(sim, *target_point))
+    return target_point
+
+
 if __name__ == '__main__':
-    res = detect('../point.png', '../screen2.png')
+    res = detect('../point.png', '../screen.png')
     print(res)

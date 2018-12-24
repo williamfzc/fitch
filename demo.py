@@ -1,10 +1,11 @@
 from fitch.screen import FDevice
-from fitch.detector import detect
-from fitch.player import tap
-from fitch import config
+from fitch import detector
+from fitch.utils import restart_adb
 
 
-device_id = '3d33076e'
+restart_adb()
+
+device_id = '4df189487c7b6fef'
 template_path = 'target.png'
 
 # get screen
@@ -12,10 +13,9 @@ device = FDevice(device_id)
 pic_path = device.screen_shot()
 
 # find point
-result = detect(template_path, pic_path)
-sim = result['data'][template_path]['max_val']
-assert sim > config.CV_THRESHOLD, 'target point not found'
-target_point = result['data'][template_path]['max_loc']
+result = detector.detect(template_path, pic_path)
+target_point = detector.cal_location(result)
 
 # tap it
-tap(device_id, target_point)
+device.player.tap(target_point)
+device.stop()

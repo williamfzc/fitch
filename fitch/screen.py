@@ -4,6 +4,7 @@ import os
 from fitch import config
 from fitch.logger import logger
 from fitch.utils import is_device_connected
+from fitch.player import ActionPlayer
 
 _ADB = config.ADB_EXECUTOR
 
@@ -13,6 +14,11 @@ class FDevice(object):
         assert is_device_connected(device_id), 'device {} not connected'.format(device_id)
         self.device_id = device_id
         self.ADB = [_ADB, '-s', device_id]
+        self.player = ActionPlayer(device_id)
+
+    def stop(self):
+        self.player.stop()
+        logger.info('fDevice {} stopped'.format(self.device_id))
 
     def screen_shot(self):
         """ screen shot, get .png file and return its path """
