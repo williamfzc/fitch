@@ -27,9 +27,9 @@ class FDevice(object):
         target_pc_path = os.path.join(config.PROJECT_PATH, 'temp_screen.png')
         if os.path.exists(target_pc_path):
             os.remove(target_pc_path)
-        subprocess.check_call([*self.ADB, 'shell', 'screencap', '-p', pic_android_path])
+        subprocess.check_call([*self.ADB, 'shell', 'screencap', '-p', pic_android_path], stdout=subprocess.DEVNULL)
         logger.info('screen shot finished')
-        subprocess.check_call([*self.ADB, 'pull', pic_android_path, config.PROJECT_PATH])
+        subprocess.check_call([*self.ADB, 'pull', pic_android_path, config.PROJECT_PATH], stdout=subprocess.DEVNULL)
         assert os.path.exists(target_pc_path), 'target screen shot file not found'
         logger.info('screen shot saved in {}'.format(target_pc_path))
         return target_pc_path
