@@ -1,11 +1,14 @@
 from pyminitouch import safe_device
 import time
 
+from fitch.logger import logger
+
 
 def tap(device_id, point):
-    point = map(int, point)
+    x, y = map(int, point)
+    logger.info('tap point: ({}, {})'.format(x, y))
     with safe_device(device_id) as d:
-        d.tap([point], duration=200)
+        d.tap([(x, y)], duration=200)
         time.sleep(0.2)
 
 
