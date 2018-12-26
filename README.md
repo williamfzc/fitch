@@ -12,3 +12,8 @@ find object on android screen, and touch it.
 
 - [pyminitouch](https://github.com/williamfzc/pyminitouch)
 - [findit](https://github.com/williamfzc/findit)
+- [fastcap](https://github.com/williamfzc/fastcap)
+
+## license
+
+[MIT](LICENSE)
