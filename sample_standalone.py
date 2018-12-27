@@ -1,6 +1,5 @@
 """ work standalone """
-from fitch.screen import FDevice
-from fitch import detector
+from fitch import FDevice, detector
 from fitch.utils import restart_adb
 
 

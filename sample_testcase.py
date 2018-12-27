@@ -1,5 +1,5 @@
 """ work with unittest """
-from fitch.testcase import FTestCase
+from fitch import FTestCase
 import unittest
 
 
