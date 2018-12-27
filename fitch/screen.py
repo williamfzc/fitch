@@ -28,6 +28,7 @@ from fitch.utils import is_device_connected
 from fitch.player import ActionPlayer
 
 from fastcap import MNCDevice
+from pyatool import PYAToolkit
 
 
 class FDevice(object):
@@ -36,6 +37,7 @@ class FDevice(object):
         self.device_id = device_id
         self.mnc = MNCDevice(device_id)
         self.player = ActionPlayer(device_id)
+        self.toolkit = PYAToolkit(device_id)
 
     def screen_shot(self):
         """ screen shot and return its path """
