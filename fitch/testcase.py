@@ -39,11 +39,16 @@ class FTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.f_init_device(cls.f_device_id)
+        if not cls.f_device:
+            cls.f_init_device(cls.f_device_id)
+        cls.f_device_id = cls.f_device.device_id
 
     @classmethod
     def tearDownClass(cls):
-        cls.f_stop_device()
+        if cls.f_device:
+            cls.f_stop_device()
+            cls.f_device = None
+        cls.f_device_id = None
 
     @classmethod
     def f_check_pic(cls, pic_path):
