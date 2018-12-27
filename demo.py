@@ -1,11 +1,13 @@
+""" work standalone """
 from fitch.screen import FDevice
 from fitch import detector
 from fitch.utils import restart_adb
 
 
+# restart adb server (optional)
 restart_adb()
 
-device_id = '4df189487c7b6fef'
+device_id = '123456F'
 template_path = 'target.png'
 
 # get screen
