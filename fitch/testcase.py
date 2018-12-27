@@ -26,6 +26,7 @@ import os
 
 from fitch.screen import FDevice
 from fitch import detector
+from fitch.logger import logger
 
 
 class FTestCase(unittest.TestCase):
@@ -45,11 +46,21 @@ class FTestCase(unittest.TestCase):
         cls.f_stop_device()
 
     @classmethod
+    def f_check_pic(cls, pic_path):
+        """ check pic path, and return its abspath """
+        # TODO auto load and import pictures from json?
+        assert os.path.isfile(pic_path), 'picture {} not found'.format(pic_path)
+        pic_abs_path = os.path.abspath(pic_path)
+        logger.info('LOAD PICTURE: {}'.format(pic_abs_path))
+        return pic_abs_path
+
+    @classmethod
     def f_init_device(cls, device_id):
         """ init device, and return it """
         assert cls.f_device_id, 'should set your device id first, likes `cls.f_device_id="1234F"`'
         assert not cls.f_device, 'device {} already existed, should not be re-init'.format(device_id)
         cls.f_device = FDevice(device_id)
+        logger.info('DEVICE {} INIT FINISHED'.format(device_id))
         return cls.f_device
 
     @classmethod
@@ -72,3 +83,4 @@ class FTestCase(unittest.TestCase):
     def f_stop_device(cls):
         """ stop device after usage """
         cls.f_device and cls.f_device.stop()
+        logger.info('DEVICE {} STOPPED'.format(cls.f_device_id))
