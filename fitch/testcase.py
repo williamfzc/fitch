@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import unittest
+import os
 
 from fitch.screen import FDevice
 from fitch import detector
@@ -57,6 +58,7 @@ class FTestCase(unittest.TestCase):
         assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
         pic_path = cls.f_device.screen_shot()
         result = detector.detect(target_pic_path, pic_path)
+        os.remove(pic_path)
 
         try:
             target_point = detector.cal_location(result)
