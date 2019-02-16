@@ -31,7 +31,7 @@ from fitch.logger import logger
 
 
 class FPic(object):
-    def __init__(self, pic_path):
+    def __init__(self, pic_path: str):
         # /path/to/pic/pic1.png
         self.path = pic_path
         assert self.is_existed(), '{} not existed'.format(pic_path)
@@ -47,7 +47,7 @@ class FPic(object):
 class FPicStore(object):
     """ load pictures from dir, and store them here """
 
-    def __init__(self, pic_dir_path):
+    def __init__(self, pic_dir_path: str):
         assert os.path.isdir(pic_dir_path), '{} not a dir'.format(pic_dir_path)
         self.pic_dir_path = pic_dir_path
         self.fpic_dict = dict()
@@ -86,7 +86,7 @@ class FTestCase(unittest.TestCase):
         cls.f_device_id = None
 
     @classmethod
-    def f_init_store(cls, pic_dir_path):
+    def f_init_store(cls, pic_dir_path: str):
         """
         init pic store, and you can access them directly.
 
@@ -97,7 +97,7 @@ class FTestCase(unittest.TestCase):
         cls.f_pic_store = FPicStore(pic_dir_path)
 
     @classmethod
-    def f_init_device(cls, device_id):
+    def f_init_device(cls, device_id: str) -> FDevice:
         """ init device, and return it """
         assert cls.f_device_id, 'should set your device id first, likes `cls.f_device_id="1234F"`'
         assert not cls.f_device, 'device {} already existed, should not be re-init'.format(device_id)
@@ -106,7 +106,7 @@ class FTestCase(unittest.TestCase):
         return cls.f_device
 
     @classmethod
-    def f_find_target(cls, target_pic_path):
+    def f_find_target(cls, target_pic_path: str):
         """ find target, and get its position """
         assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
         pic_path = cls.f_device.screen_shot()
@@ -122,7 +122,7 @@ class FTestCase(unittest.TestCase):
         return target_point
 
     @classmethod
-    def f_find_and_tap_target(cls, target_pic_path):
+    def f_find_and_tap_target(cls, target_pic_path: str):
         """ find target, get its position, and tap it """
         target_point = cls.f_find_target(target_pic_path)
         assert target_point is not None, '{} not found'.format(target_pic_path)

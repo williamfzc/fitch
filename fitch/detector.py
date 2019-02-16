@@ -29,7 +29,7 @@ from fitch import config
 from fitch.logger import logger
 
 
-def detect(template, target) -> dict:
+def detect(template: str, target: str) -> dict:
     fi = FindIt()
     # change config
     fi.config.cv_method = config.CV_METHOD

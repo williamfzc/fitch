@@ -28,14 +28,14 @@ from fitch.logger import logger
 
 
 class ActionPlayer(object):
-    def __init__(self, device_id):
+    def __init__(self, device_id: str):
         self.device_id = device_id
         self.mnt = MNTDevice(device_id)
 
     def stop(self):
         self.mnt.stop()
 
-    def tap(self, point, duration=100):
+    def tap(self, point: (list, tuple), duration=100):
         x, y = map(int, point)
         logger.info('tap point: ({}, {})'.format(x, y))
         self.mnt.tap([(x, y)], duration=duration)
@@ -43,10 +43,10 @@ class ActionPlayer(object):
         # add 50ms for syncing status
         time.sleep((duration + 50) / 1000)
 
-    def long_tap(self, point, duration=1000):
+    def long_tap(self, point: (list, tuple), duration: int=1000):
         self.tap(point, duration)
 
-    def swipe(self, point1, point2, duration=1, part=10):
+    def swipe(self, point1: (list, tuple), point2: (list, tuple), duration: int = 1, part: int = 10):
         self.mnt.ext_smooth_swipe([point1, point2], duration=duration, part=part)
         time.sleep((duration + 50) / 1000)
 

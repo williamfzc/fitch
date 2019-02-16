@@ -34,7 +34,7 @@ def restart_adb():
     subprocess.check_call([_ADB, 'start-server'])
 
 
-def is_device_connected(device_id):
+def is_device_connected(device_id: str):
     """ return True if device connected, else return False """
     _ADB = config.ADB_EXECUTOR
     try:

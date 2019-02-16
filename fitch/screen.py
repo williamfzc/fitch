@@ -32,14 +32,14 @@ from pyatool import PYAToolkit
 
 
 class FDevice(object):
-    def __init__(self, device_id):
+    def __init__(self, device_id: str):
         assert is_device_connected(device_id), 'device {} not connected'.format(device_id)
         self.device_id = device_id
         self.mnc = MNCDevice(device_id)
         self.player = ActionPlayer(device_id)
         self.toolkit = PYAToolkit(device_id)
 
-    def screen_shot(self):
+    def screen_shot(self) -> str:
         """ screen shot and return its path """
         temp_pic = tempfile.NamedTemporaryFile('w+', delete=False, suffix='.png')
         temp_pic_name = temp_pic.name

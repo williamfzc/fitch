@@ -33,6 +33,9 @@ class DemoTestCase(FTestCase):
         # find 'target.png' on screen
         target_point = self.f_find_target(self.f_pic_store.quickapp_entry)
 
+        # if you want to use some special pictures, you can:
+        # target_point = self.f_find_target('/abspath/to/your/pic')
+
         # assert: existed?
         assert target_point, 'target not existed!'
 
