@@ -39,7 +39,9 @@ class ActionPlayer(object):
         x, y = map(int, point)
         logger.info('tap point: ({}, {})'.format(x, y))
         self.mnt.tap([(x, y)], duration=duration)
-        time.sleep(duration / 1000)
+
+        # add 50ms for syncing status
+        time.sleep((duration + 50) / 1000)
 
 
 if __name__ == '__main__':
