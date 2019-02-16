@@ -1,5 +1,5 @@
 """ work with unittest """
-from fitch import FTestCase, FDevice
+from fitch import FTestCase, config
 import unittest
 
 
@@ -25,6 +25,10 @@ class DemoTestCase(FTestCase):
         # init picture store for easier usage (i think)
         self.f_init_store('Screenshots')
 
+        # you can set target threshold by doing this
+        # 0 ~ 1.0, default to 0.8
+        config.CV_THRESHOLD = 0.85
+
     def test_hello(self):
         # find 'target.png' on screen
         target_point = self.f_find_target(self.f_pic_store.quickapp_entry)
@@ -38,25 +42,13 @@ class DemoTestCase(FTestCase):
         # use pyatool to operate something else
         # view https://github.com/williamfzc/pyatool for details
         self.f_device.toolkit.switch_airplane(True)
+        self.f_device.toolkit.switch_airplane(False)
 
         # find 'stopflag.png' on screen
         flag_point = self.f_find_target(self.f_pic_store.quickapp_title)
 
         # assert: existed?
         assert flag_point, 'title not existed!'
-
-
-# FOR FURTHER USAGE, YOU CAN INIT YOUR DEVICE OUTSIDE, AND THEN SEND IT IN CASE.
-# YOU ONLY NEED TO INIT YOUR DEVICE ONCE.
-target_device = FDevice('3d33076e')
-
-
-class DemoATestCase(FTestCase):
-    f_device = target_device
-
-    def test_hello(self):
-        assert self.f_device.device_id == self.f_device_id
-        # do something else?
 
 
 if __name__ == '__main__':
