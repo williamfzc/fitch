@@ -3,13 +3,16 @@
     <em>UI automation based on opencv</em>
 </p>
 
+---
+
 # Usage
 
 ## As `unittest.TestCase` (recommend)
 
 can be easily merged into other framework.
 
-view [sample_testcase.py](sample_testcase.py) for detail.
+- view [sample project](sample) for quick start :)
+- view [sample_testcase.py](sample_testcase.py) for more detail.
 
 ## Freestyle
 
