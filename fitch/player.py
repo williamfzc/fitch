@@ -43,6 +43,13 @@ class ActionPlayer(object):
         # add 50ms for syncing status
         time.sleep((duration + 50) / 1000)
 
+    def long_tap(self, point, duration=1000):
+        self.tap(point, duration)
+
+    def swipe(self, point1, point2, duration=1, part=10):
+        self.mnt.ext_smooth_swipe([point1, point2], duration=duration, part=part)
+        time.sleep((duration + 50) / 1000)
+
 
 if __name__ == '__main__':
     ap = ActionPlayer('4df189487c7b6fef')

@@ -23,6 +23,7 @@ SOFTWARE.
 """
 import unittest
 import os
+import time
 
 from fitch.screen import FDevice
 from fitch import detector
@@ -96,15 +97,6 @@ class FTestCase(unittest.TestCase):
         cls.f_pic_store = FPicStore(pic_dir_path)
 
     @classmethod
-    def f_check_pic(cls, pic_path):
-        """ check pic path, and return its abspath """
-        # TODO auto load and import pictures from json?
-        assert os.path.isfile(pic_path), 'picture {} not found'.format(pic_path)
-        pic_abs_path = os.path.abspath(pic_path)
-        logger.info('LOAD PICTURE: {}'.format(pic_abs_path))
-        return pic_abs_path
-
-    @classmethod
     def f_init_device(cls, device_id):
         """ init device, and return it """
         assert cls.f_device_id, 'should set your device id first, likes `cls.f_device_id="1234F"`'
@@ -130,7 +122,21 @@ class FTestCase(unittest.TestCase):
         return target_point
 
     @classmethod
+    def f_find_and_tap_target(cls, target_pic_path):
+        """ find target, get its position, and tap it """
+        target_point = cls.f_find_target(target_pic_path)
+        assert target_point is not None, '{} not found'.format(target_pic_path)
+        cls.f_device.player.tap(target_point)
+
+    @classmethod
     def f_stop_device(cls):
         """ stop device after usage """
         cls.f_device and cls.f_device.stop()
         logger.info('DEVICE {} STOPPED'.format(cls.f_device_id))
+
+    @classmethod
+    def f_reset(cls):
+        """ back to home page, and clean up backstage """
+        cls.f_device.toolkit.input_key_event(3)
+        time.sleep(1)
+        cls.f_device.toolkit.clean_backstage()
