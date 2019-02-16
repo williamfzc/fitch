@@ -29,6 +29,40 @@ from fitch import detector
 from fitch.logger import logger
 
 
+class FPic(object):
+    def __init__(self, pic_path):
+        # /path/to/pic/pic1.png
+        self.path = pic_path
+        assert self.is_existed(), '{} not existed'.format(pic_path)
+        # pic1.png
+        self.file_name = pic_path.split(os.sep)[-1]
+        # pic1
+        self.name = self.file_name.split('.')[0]
+
+    def is_existed(self):
+        return bool(os.path.isfile(self.path))
+
+
+class FPicStore(object):
+    """ load pictures from dir, and store them here """
+
+    def __init__(self, pic_dir_path):
+        assert os.path.isdir(pic_dir_path), '{} not a dir'.format(pic_dir_path)
+        self.pic_dir_path = pic_dir_path
+        self.fpic_dict = dict()
+
+        for each_pic_path in [os.path.join(pic_dir_path, i) for i in os.listdir(self.pic_dir_path)]:
+            each_fpic = FPic(each_pic_path)
+            each_pic_name = each_fpic.name
+            self.fpic_dict[each_pic_name] = each_fpic
+            logger.info('LOAD PICTURE [{}] FROM {}'.format(each_pic_name, each_pic_path))
+
+    def __getattr__(self, item):
+        if item in self.fpic_dict:
+            return self.fpic_dict[item].path
+        raise FileNotFoundError('picture {} not found in {}'.format(item, self.pic_dir_path))
+
+
 class FTestCase(unittest.TestCase):
     """
     FTestCase, based on unittest.TestCase.
@@ -49,6 +83,17 @@ class FTestCase(unittest.TestCase):
             cls.f_stop_device()
             cls.f_device = None
         cls.f_device_id = None
+
+    @classmethod
+    def f_init_store(cls, pic_dir_path):
+        """
+        init pic store, and you can access them directly.
+
+        eg:
+        self.f_init_store('/path/to/your/pic_dir')
+        self.f_pic_store.YOUR_PIC_NAME
+        """
+        cls.f_pic_store = FPicStore(pic_dir_path)
 
     @classmethod
     def f_check_pic(cls, pic_path):
