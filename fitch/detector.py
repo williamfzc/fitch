@@ -41,7 +41,7 @@ def detect(template: str, target: str) -> dict:
     return result
 
 
-def cal_location(result_dict: dict):
+def cal_location(result_dict: dict) -> (list, tuple):
     """ analyse result and get its position """
     data = result_dict['data'][0]
     sim = data['max_val']

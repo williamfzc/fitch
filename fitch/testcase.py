@@ -65,9 +65,10 @@ class FPicStore(object):
 
 
 class FTestCase(unittest.TestCase):
+    # TODO API needs better design and classification for further development
     """
     FTestCase, based on unittest.TestCase.
-    Can be easily used by other modules, which support unittest.
+    Can be easily used by other modules, which supports unittest.
     """
     f_device_id = None
     f_device = None
@@ -106,8 +107,13 @@ class FTestCase(unittest.TestCase):
         return cls.f_device
 
     @classmethod
-    def f_find_target(cls, target_pic_path: str):
+    def f_find_target(cls, target_pic_path: str) -> (list, tuple):
         """ find target, and get its position """
+
+        # support using name directly
+        if not os.path.isfile(target_pic_path) and hasattr(cls, 'f_pic_store'):
+            target_pic_path = getattr(cls.f_pic_store, target_pic_path)
+
         assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
         pic_path = cls.f_device.screen_shot()
         result = detector.detect(target_pic_path, pic_path)
@@ -122,11 +128,11 @@ class FTestCase(unittest.TestCase):
         return target_point
 
     @classmethod
-    def f_find_and_tap_target(cls, target_pic_path: str):
+    def f_tap_target(cls, target_pic_path: str, duration: str = 100):
         """ find target, get its position, and tap it """
         target_point = cls.f_find_target(target_pic_path)
         assert target_point is not None, '{} not found'.format(target_pic_path)
-        cls.f_device.player.tap(target_point)
+        cls.f_device.player.tap(target_point, duration=duration)
 
     @classmethod
     def f_stop_device(cls):
