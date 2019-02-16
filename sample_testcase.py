@@ -29,29 +29,37 @@ class DemoTestCase(FTestCase):
         # 0 ~ 1.0, default to 0.8
         config.CV_THRESHOLD = 0.85
 
+        # clean
+        self.f_reset()
+
     def test_hello(self):
-        # find 'target.png' on screen
-        target_point = self.f_find_target(self.f_pic_store.quickapp_entry)
+        # find 'Screenshots/target.png' on screen
+        target_point = self.f_find_target('target')
 
         # if you want to use some special pictures, you can:
         # target_point = self.f_find_target('/abspath/to/your/pic')
 
         # assert: existed?
-        assert target_point, 'target not existed!'
+        assert target_point is not None, 'target not existed!'
 
-        # and tap it
-        self.f_device.player.tap(target_point)
+        # and tap it with API:
+        # high level API (recommend)
+        self.f_tap_target('target')
+
+        # or, low level API (more flexible)
+        # self.f_device.player.tap(target_point)
+        # self.f_device.player.swipe((100, 100), (400, 400))
 
         # use pyatool to operate something else
         # view https://github.com/williamfzc/pyatool for details
         self.f_device.toolkit.switch_airplane(True)
         self.f_device.toolkit.switch_airplane(False)
 
-        # find 'stopflag.png' on screen
-        flag_point = self.f_find_target(self.f_pic_store.quickapp_title)
+        # find and check 'Screenshots/title.png' on screen
+        assert self.f_find_target('title'), 'title not existed!'
 
-        # assert: existed?
-        assert flag_point, 'title not existed!'
+    def tearDown(self):
+        self.f_reset()
 
 
 if __name__ == '__main__':
