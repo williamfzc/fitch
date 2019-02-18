@@ -1,6 +1,6 @@
 <h1 align="center">FITCH</h1>
 <p align="center">
-    <em>UI automation based on opencv</em>
+    <em>Android UI automation based on opencv</em>
 </p>
 
 ---
@@ -9,14 +9,20 @@
 
 ## As `unittest.TestCase` (recommend)
 
-can be easily merged into other framework.
+- Use it as `unittest.TestCase`
+- Manage it with `unittest.TestSuite` 
+- Run it with `unittest.TestRunner`
+- Or some other way you prefer
+
+Need some sample code? 
 
 - view [sample project](sample) for quick start :)
 - view [sample_testcase.py](sample_testcase.py) for more detail.
 
 ## Freestyle
 
-or, you can use it directly, as your wish.
+- Or, you can use it directly, as your wish.
+- It can be easily merged into other framework.
 
 view [sample_standalone.py](sample_standalone.py) for detail.
 
