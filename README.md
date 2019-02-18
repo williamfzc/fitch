@@ -3,6 +3,9 @@
     <em>Android UI automation based on opencv</em>
 </p>
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/de3e2f35842f80a26ed3/maintainability)](https://codeclimate.com/github/williamfzc/fitch/maintainability)
+[![PyPI version](https://badge.fury.io/py/fitch.svg)](https://badge.fury.io/py/fitch)
+
 ---
 
 # Usage
