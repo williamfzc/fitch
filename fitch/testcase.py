@@ -47,21 +47,22 @@ class FPic(object):
 class FPicStore(object):
     """ load pictures from dir, and store them here """
 
-    def __init__(self, pic_dir_path: str):
-        assert os.path.isdir(pic_dir_path), '{} not a dir'.format(pic_dir_path)
-        self.pic_dir_path = pic_dir_path
-        self.fpic_dict = dict()
-
-        for each_pic_path in [os.path.join(pic_dir_path, i) for i in os.listdir(self.pic_dir_path)]:
-            each_fpic = FPic(each_pic_path)
-            each_pic_name = each_fpic.name
-            self.fpic_dict[each_pic_name] = each_fpic
-            logger.info('LOAD PICTURE [{}] FROM {}'.format(each_pic_name, each_pic_path))
+    def __init__(self):
+        self.f_pic_dict = dict()
 
     def __getattr__(self, item):
-        if item in self.fpic_dict:
-            return self.fpic_dict[item].path
-        raise FileNotFoundError('picture {} not found in {}'.format(item, self.pic_dir_path))
+        if item in self.f_pic_dict:
+            return self.f_pic_dict[item].path
+        raise FileNotFoundError('picture {} file not found'.format(item))
+
+    def load(self, pic_dir_path):
+        assert os.path.isdir(pic_dir_path), '{} not a dir'.format(pic_dir_path)
+
+        for each_pic_path in [os.path.join(pic_dir_path, i) for i in os.listdir(pic_dir_path)]:
+            each_f_pic = FPic(each_pic_path)
+            each_pic_name = each_f_pic.name
+            self.f_pic_dict[each_pic_name] = each_f_pic
+            logger.info('LOAD PICTURE [{}] FROM [{}]'.format(each_pic_name, each_pic_path))
 
 
 class FTestCase(unittest.TestCase):
@@ -72,6 +73,7 @@ class FTestCase(unittest.TestCase):
     """
     f_device_id = None
     f_device = None
+    f_pic_store = FPicStore()
 
     @classmethod
     def setUpClass(cls):
@@ -91,12 +93,12 @@ class FTestCase(unittest.TestCase):
         """
         init pic store, and you can access them directly.
 
-        eg:
-        self.f_init_store('/path/to/your/pic_dir')
-        self.f_pic_store.YOUR_PIC_NAME
+        support multiple directory:
+            self.f_init_store('/path/to/your/pic_dir1')
+            self.f_init_store('/path/to/your/pic_dir2')
         """
         full_pic_dir_path = os.path.join(os.getcwd(), pic_dir_path)
-        cls.f_pic_store = FPicStore(full_pic_dir_path)
+        cls.f_pic_store.load(full_pic_dir_path)
 
     @classmethod
     def f_init_device(cls, device_id: str) -> FDevice:

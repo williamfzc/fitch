@@ -6,6 +6,7 @@ import time
 class SFTestCase(FTestCase):
     # this function can be directly used in case
     def clean_recent(self):
+        self.f_init_store('pictures/global')
         self.f_reset()
         self.f_device.toolkit.input_key_event(187)
         time.sleep(0.5)
@@ -18,7 +19,9 @@ class TestWechat(SFTestCase):
 
     def setUp(self):
         # load your picture store here (build and set your own path)
-        self.f_init_store('pictures')
+        self.f_init_store('pictures/wechat')
+        # need another one?
+        self.f_init_store('pictures/global')
 
         # back to home page and clean up
         self.clean_recent()
