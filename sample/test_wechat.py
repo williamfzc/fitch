@@ -3,8 +3,19 @@ import os
 import time
 
 
-class Case_Wechat(FTestCase):
-    f_device_id = '123456F'
+# build your own API
+class SFTestCase(FTestCase):
+    # this function can be directly used in case
+    def clean_recent(self):
+        self.f_reset()
+        self.f_device.toolkit.input_key_event(187)
+        time.sleep(0.5)
+        self.f_tap_target('x')
+        time.sleep(1)
+
+
+class TestWechat(SFTestCase):
+    f_device_id = '3d33076e'
 
     def setUp(self):
         # load your picture store here (build and set your own path)
@@ -12,7 +23,7 @@ class Case_Wechat(FTestCase):
         self.f_init_store(os.path.join(cwd, 'pictures'))
 
         # back to home page and clean up
-        self.f_reset()
+        self.clean_recent()
 
     def test_enter_wechat(self):
         # find wechat logo, and tap it
@@ -25,4 +36,4 @@ class Case_Wechat(FTestCase):
 
     def tearDown(self):
         # back to home page and clean up
-        self.f_reset()
+        self.clean_recent()
