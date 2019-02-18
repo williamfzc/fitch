@@ -24,6 +24,28 @@ Need some sample code?
 - view [sample project](sample) for quick start :)
 - view [sample_testcase.py](sample_testcase.py) for more detail.
 
+## Docker Container (Linux only)
+
+Try this:
+
+```shell
+git clone https://github.com/williamfzc/fitch.git
+cd fitch
+docker run --rm \
+    --privileged \
+    -v /dev/bus/usb:/dev/bus/usb \
+    -v `pwd`/sample:/usr/src/app \
+    williamfzc/fitch
+```
+
+For device management, you can use `--device`：
+
+```shell
+--device /dev/bus/usb/001:/dev/bus/usb/001:rwm
+```
+
+For further usage, view [doringland/ud4d](https://github.com/doringland/ud4d).
+
 ## Freestyle
 
 - Or, you can use it directly, as your wish.
@@ -47,7 +69,7 @@ Please use python3.
 pip install fitch
 ```
 
-## From source code (dev)
+## From source code (Dev)
 
 ```shell
 git clone https://github.com/williamfzc/fitch.git
