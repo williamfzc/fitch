@@ -95,7 +95,8 @@ class FTestCase(unittest.TestCase):
         self.f_init_store('/path/to/your/pic_dir')
         self.f_pic_store.YOUR_PIC_NAME
         """
-        cls.f_pic_store = FPicStore(pic_dir_path)
+        full_pic_dir_path = os.path.join(os.getcwd(), pic_dir_path)
+        cls.f_pic_store = FPicStore(full_pic_dir_path)
 
     @classmethod
     def f_init_device(cls, device_id: str) -> FDevice:

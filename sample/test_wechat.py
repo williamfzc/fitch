@@ -1,5 +1,4 @@
 from fitch import FTestCase
-import os
 import time
 
 
@@ -19,8 +18,7 @@ class TestWechat(SFTestCase):
 
     def setUp(self):
         # load your picture store here (build and set your own path)
-        cwd = os.path.dirname(__file__)
-        self.f_init_store(os.path.join(cwd, 'pictures'))
+        self.f_init_store('pictures')
 
         # back to home page and clean up
         self.clean_recent()
