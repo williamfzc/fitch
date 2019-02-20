@@ -7,11 +7,11 @@ class SFTestCase(FTestCase):
     # this function can be directly used in case
     def clean_recent(self):
         self.f_init_store('pictures/global')
-        self.f_reset()
         self.f_device.toolkit.input_key_event(187)
-        time.sleep(0.5)
+        time.sleep(1)
         self.f_tap_target('x')
         time.sleep(1)
+        self.f_device.toolkit.input_key_event(187)
 
 
 class TestWechat(SFTestCase):

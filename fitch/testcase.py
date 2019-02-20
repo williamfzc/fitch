@@ -23,10 +23,8 @@ SOFTWARE.
 """
 import unittest
 import os
-import time
 
 from fitch.screen import FDevice
-from fitch import detector
 from fitch.logger import logger
 
 
@@ -71,9 +69,9 @@ class FTestCase(unittest.TestCase):
     FTestCase, based on unittest.TestCase.
     Can be easily used by other modules, which supports unittest.
     """
-    f_device_id = None
-    f_device = None
-    f_pic_store = FPicStore()
+    f_device_id: str = None
+    f_device: FDevice = None
+    f_pic_store: FPicStore = FPicStore()
 
     @classmethod
     def setUpClass(cls):
@@ -110,42 +108,50 @@ class FTestCase(unittest.TestCase):
         return cls.f_device
 
     @classmethod
-    def f_find_target(cls, target_pic_path: str) -> (list, tuple):
-        """ find target, and get its position """
-
-        # support using name directly
-        if not os.path.isfile(target_pic_path) and hasattr(cls, 'f_pic_store'):
-            target_pic_path = getattr(cls.f_pic_store, target_pic_path)
-
-        assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
-        pic_path = cls.f_device.screen_shot()
-        result = detector.detect(target_pic_path, pic_path)
-        os.remove(pic_path)
-
-        try:
-            target_point = detector.cal_location(result)
-        except AssertionError:
-            # if not found, return None
-            return None
-
-        return target_point
-
-    @classmethod
-    def f_tap_target(cls, target_pic_path: str, duration: str = 100):
-        """ find target, get its position, and tap it """
-        target_point = cls.f_find_target(target_pic_path)
-        assert target_point is not None, '{} not found'.format(target_pic_path)
-        cls.f_device.player.tap(target_point, duration=duration)
-
-    @classmethod
     def f_stop_device(cls):
         """ stop device after usage """
         cls.f_device and cls.f_device.stop()
         logger.info('DEVICE {} STOPPED'.format(cls.f_device_id))
 
     @classmethod
+    def f_find_target(cls, target_pic_path: str) -> (list, tuple):
+        """ find target, and get its position """
+        target_pic_path = cls._format_pic_path(target_pic_path)
+        assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
+        return cls.f_device.find_target(target_pic_path)
+
+    @classmethod
+    def f_tap_target(cls, target_pic_path: str, duration: int = 100):
+        """ find target, get its position, and tap it """
+        target_pic_path = cls._format_pic_path(target_pic_path)
+        return cls.f_device.tap_target(target_pic_path, duration)
+
+    @classmethod
     def f_reset(cls):
-        """ back to home page, and clean up backstage """
-        cls.f_device.toolkit.input_key_event(3)
-        time.sleep(1)
-        cls.f_device.toolkit.clean_backstage()
+        """
+        back to home page, and clean up backstage
+
+        TODO how to clean up backstage using adb? no idea.
+        You'd better implement it by yourself, eg:
+
+            def clean_recent(self):
+                self.f_reset()
+                self.f_device.toolkit.input_key_event(187)
+                time.sleep(1)
+
+                self.f_init_store('pictures/global')
+                self.f_tap_target('x')
+                time.sleep(2)
+        """
+        logger.warning('FUNCTION f_reset NOT IMPLEMENTED NOW')
+
+    @classmethod
+    def _format_pic_path(cls, pic_path: str):
+        """ try to load picture from pic_store, if pic_path is invalid """
+        # support using name directly
+        if not os.path.isfile(pic_path):
+            if hasattr(cls, 'f_pic_store'):
+                return getattr(cls.f_pic_store, pic_path)
+            raise FileNotFoundError('PICTURE [{}] NOT FOUND'.format(pic_path))
+        # do nothing if existed
+        return pic_path

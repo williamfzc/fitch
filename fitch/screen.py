@@ -22,10 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import tempfile
+import os
 
 from fitch.logger import logger
 from fitch.utils import is_device_connected
 from fitch.player import ActionPlayer
+from fitch import detector
 
 from fastcap import MNCDevice
 from pyatool import PYAToolkit
@@ -49,8 +51,28 @@ class FDevice(object):
         return temp_pic_name
 
     def stop(self):
+        """ stop device, and clean up """
         self.player.stop()
         logger.info('fDevice {} stopped'.format(self.device_id))
+
+    def find_target(self, target_path: str) -> (list, tuple):
+        """ find target pic in screen, and get its position (or None) """
+        pic_path = self.screen_shot()
+        result = detector.detect(target_path, pic_path)
+        os.remove(pic_path)
+
+        try:
+            target_point = detector.cal_location(result)
+        except AssertionError:
+            # if not found, return None
+            return None
+        return target_point
+
+    def tap_target(self, target_path: str, duration: int = 100):
+        """ find target pic in screen, get its position, and tap it """
+        target_point = self.find_target(target_path)
+        assert target_point is not None, 'TARGET [{}] NOT FOUND IN SCREEN'.format(target_path)
+        self.player.tap(target_point, duration=duration)
 
 
 if __name__ == '__main__':
