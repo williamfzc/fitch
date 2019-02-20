@@ -4,14 +4,19 @@ import time
 
 # build your own API
 class SFTestCase(FTestCase):
+    KEY_CODE_HOME = 3
+    KEY_CODE_RECENT = 187
+
     # this function can be directly used in case
     def clean_recent(self):
         self.f_init_store('pictures/global')
-        self.f_device.toolkit.input_key_event(187)
-        time.sleep(1)
+        self.f_device.toolkit.input_key_event(self.KEY_CODE_HOME)
+        time.sleep(0.5)
+        self.f_device.toolkit.input_key_event(self.KEY_CODE_RECENT)
+        time.sleep(0.5)
         self.f_tap_target('x')
         time.sleep(1)
-        self.f_device.toolkit.input_key_event(187)
+        self.f_device.toolkit.input_key_event(self.KEY_CODE_HOME)
 
 
 class TestWechat(SFTestCase):
@@ -33,8 +38,7 @@ class TestWechat(SFTestCase):
         # wait for starting up
         time.sleep(1)
         # check camera icon
-        assert self.f_find_target('wechat_camera_icon'), \
-            'wechat camera icon not found'
+        assert self.f_find_target('wechat_camera_icon'), 'wechat camera icon not found'
 
     def tearDown(self):
         # back to home page and clean up
