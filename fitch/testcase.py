@@ -64,9 +64,8 @@ class FPicStore(object):
 
 
 class FTestCase(unittest.TestCase):
-    # TODO API needs better design and classification for further development
     """
-    FTestCase, based on unittest.TestCase.
+    Based on unittest.TestCase.
     Can be easily used by other modules, which supports unittest.
     """
     f_device_id: str = None
@@ -89,11 +88,7 @@ class FTestCase(unittest.TestCase):
     @classmethod
     def f_init_store(cls, pic_dir_path: str):
         """
-        init pic store, and you can access them directly.
-
-        support multiple directory:
-            self.f_init_store('/path/to/your/pic_dir1')
-            self.f_init_store('/path/to/your/pic_dir2')
+        init pic store, and you can access them directly. it can be called multiple times.
         """
         full_pic_dir_path = os.path.join(os.getcwd(), pic_dir_path)
         cls.f_pic_store.load(full_pic_dir_path)
@@ -129,9 +124,11 @@ class FTestCase(unittest.TestCase):
     @classmethod
     def f_reset(cls):
         """
-        back to home page, and clean up backstage
+        (NOT IMPLEMENTED) back to home page, and clean up backstage
+        """
 
-        TODO how to clean up backstage using adb? no idea.
+        """
+        How to clean up backstage using adb? I have no idea yet.
         You'd better implement it by yourself, eg:
 
             def clean_recent(self):
