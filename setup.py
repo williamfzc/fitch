@@ -14,5 +14,6 @@ setup(
         'findit',
         'fastcap',
         'pyatool',
+        'loguru',
     ]
 )
