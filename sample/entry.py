@@ -1,6 +1,7 @@
 from unittest import TestLoader, TestSuite
 from HtmlTestRunner import HTMLTestRunner
 from cases.test_wechat import TestWechat
+from cases import target_device
 
 
 # load your cases
@@ -13,3 +14,4 @@ suite = TestSuite([
 
 runner = HTMLTestRunner(output='sample_suite')
 runner.run(suite)
+target_device.stop()

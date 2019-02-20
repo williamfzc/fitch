@@ -12,6 +12,8 @@
 
 # Usage
 
+> You can use some tools like [scrcpy](https://github.com/Genymobile/scrcpy) to monitor screen, and get screenshot conveniently.
+
 ## As `unittest.TestCase` (recommend)
 
 - Use it as `unittest.TestCase`
@@ -46,12 +48,29 @@ For device management, you can use `--device`：
 
 For further usage, view [doringland/ud4d](https://github.com/doringland/ud4d).
 
-## Freestyle
+## As a normal package
 
-- Or, you can use it directly, as your wish.
-- It can be easily merged into other framework.
+Or, more flexible:
 
-view [sample_standalone.py](sample_standalone.py) for detail.
+```python
+from fitch import FDevice
+from fitch.utils import restart_adb
+
+
+# restart adb server (optional)
+restart_adb()
+
+device_id = '123456F'
+template_path = 'target.png'
+
+device = FDevice(device_id)
+device.tap_target(template_path)
+
+# must stop it after usage
+device.stop()
+```
+
+View [screen.py](fitch/screen.py) for detail.
 
 # What it will do
 
