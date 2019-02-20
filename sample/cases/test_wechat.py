@@ -25,6 +25,7 @@ class TestWechat(SFTestCase):
 
         # back to home page and clean up
         self.clean_recent()
+        time.sleep(1)
 
     def test_enter_wechat(self):
         # find wechat logo, and tap it
