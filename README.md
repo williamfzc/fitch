@@ -7,6 +7,7 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/de3e2f35842f80a26ed3/maintainability)](https://codeclimate.com/github/williamfzc/fitch/maintainability)
 [![PyPI version](https://badge.fury.io/py/fitch.svg)](https://badge.fury.io/py/fitch)
+[![Documentation Status](https://readthedocs.org/projects/fitch/badge/?version=latest)](https://fitch.readthedocs.io/en/latest/?badge=latest)
 
 ---
 
@@ -23,6 +24,7 @@
 
 Need some sample code? 
 
+- [API Documentation](https://fitch.readthedocs.io/en/latest/#)
 - view [sample project](sample) for quick start :)
 - view [sample_testcase.py](sample_testcase.py) for more detail.
 
