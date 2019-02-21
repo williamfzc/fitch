@@ -48,13 +48,13 @@ class FDevice(object):
         temp_pic_name = temp_pic.name
         self.mnc.screen_shot()
         self.mnc.export_screen(temp_pic_name)
-        logger.info('screen shot saved in {}'.format(temp_pic_name))
+        logger.info('SCREEN SHOT SAVED IN [{}]'.format(temp_pic_name))
         return temp_pic_name
 
     def stop(self):
         """ stop device, and clean up """
         self.player.stop()
-        logger.info('fDevice {} stopped'.format(self.device_id))
+        logger.info('fDevice {} STOPPED'.format(self.device_id))
 
     def find_target(self, target_path: str, save_pic: str = None) -> (list, tuple):
         """ find target pic in screen, and get its position (or None) """

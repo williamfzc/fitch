@@ -37,7 +37,7 @@ class ActionPlayer(object):
 
     def tap(self, point: (list, tuple), duration=100):
         x, y = map(int, point)
-        logger.info('tap point: ({}, {})'.format(x, y))
+        logger.info('TAP POINT: ({}, {})'.format(x, y))
         self.mnt.tap([(x, y)], duration=duration)
 
         # add 50ms for syncing status

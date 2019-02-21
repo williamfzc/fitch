@@ -47,7 +47,7 @@ def cal_location(result_dict: dict) -> (list, tuple):
     sim = data['max_val']
     target_point = data['max_loc']
     assert sim > config.CV_THRESHOLD, 'target point not found'
-    logger.info('sim == {}, found it on ({}, {})'.format(sim, *target_point))
+    logger.info('SIM == {}, TARGET FOUND ON POSITION ({}, {})'.format(sim, *target_point))
     return target_point
 
 

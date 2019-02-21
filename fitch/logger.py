@@ -21,4 +21,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+import os
+import time
 from loguru import logger
+
+
+log_file = os.path.join(os.getcwd(), 'fitch_{}.log'.format(str(int(time.time()))))
+logger.add(log_file)
