@@ -8,6 +8,9 @@ class TestWechat(SFTestCase):
     f_device = target_device
 
     def setUp(self):
+        # save screenshot after test
+        self.f_save_pic('./cur_screen_shot')
+
         # load your picture store here (build and set your own path)
         self.f_init_store('pictures/wechat')
         # need another one?

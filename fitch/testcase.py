@@ -72,6 +72,9 @@ class FTestCase(unittest.TestCase):
     f_device: FDevice = None
     f_pic_store: FPicStore = FPicStore()
 
+    # current screen shot will be saved here, if you already called f_save_pic.
+    f_save_pic_path: str = None
+
     @classmethod
     def setUpClass(cls):
         if not cls.f_device:
@@ -84,6 +87,13 @@ class FTestCase(unittest.TestCase):
             cls.f_stop_device()
             cls.f_device = None
         cls.f_device_id = None
+
+    @classmethod
+    def f_save_pic(cls, target_dir_path: str):
+        """ will save current screen shot to target_dir_path after f_find_target, for checking after test """
+        if not os.path.isdir(target_dir_path):
+            os.makedirs(target_dir_path)
+        cls.f_save_pic_path = target_dir_path
 
     @classmethod
     def f_init_store(cls, pic_dir_path: str):
@@ -113,13 +123,15 @@ class FTestCase(unittest.TestCase):
         """ find target, and get its position """
         target_pic_path = cls._format_pic_path(target_pic_path)
         assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
-        return cls.f_device.find_target(target_pic_path)
+        current_screen_target_path = cls._get_current_screen_target_path(target_pic_path)
+        return cls.f_device.find_target(target_pic_path, save_pic=current_screen_target_path)
 
     @classmethod
     def f_tap_target(cls, target_pic_path: str, duration: int = 100):
         """ find target, get its position, and tap it """
         target_pic_path = cls._format_pic_path(target_pic_path)
-        return cls.f_device.tap_target(target_pic_path, duration)
+        current_screen_target_path = cls._get_current_screen_target_path(target_pic_path)
+        return cls.f_device.tap_target(target_pic_path, duration, save_pic=current_screen_target_path)
 
     @classmethod
     def f_reset(cls):
@@ -152,3 +164,11 @@ class FTestCase(unittest.TestCase):
             raise FileNotFoundError('PICTURE [{}] NOT FOUND'.format(pic_path))
         # do nothing if existed
         return pic_path
+
+    @classmethod
+    def _get_current_screen_target_path(cls, target_pic_path: str):
+        """ get basename of target_pic_path, and generate target path of current screenshot """
+        new_pic_name = '{}_{}'.format(cls.__name__, os.path.basename(target_pic_path))
+        if cls.f_save_pic_path:
+            return os.path.join(cls.f_save_pic_path, new_pic_name)
+        return None

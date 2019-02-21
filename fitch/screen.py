@@ -23,6 +23,7 @@ SOFTWARE.
 """
 import tempfile
 import os
+import shutil
 
 from fitch.logger import logger
 from fitch.utils import is_device_connected
@@ -55,10 +56,13 @@ class FDevice(object):
         self.player.stop()
         logger.info('fDevice {} stopped'.format(self.device_id))
 
-    def find_target(self, target_path: str) -> (list, tuple):
+    def find_target(self, target_path: str, save_pic: str = None) -> (list, tuple):
         """ find target pic in screen, and get its position (or None) """
         pic_path = self.screen_shot()
         result = detector.detect(target_path, pic_path)
+
+        if save_pic:
+            shutil.copy(pic_path, save_pic)
         os.remove(pic_path)
 
         try:
@@ -68,9 +72,9 @@ class FDevice(object):
             return None
         return target_point
 
-    def tap_target(self, target_path: str, duration: int = 100):
+    def tap_target(self, target_path: str, duration: int = 100, save_pic: str = None):
         """ find target pic in screen, get its position, and tap it """
-        target_point = self.find_target(target_path)
+        target_point = self.find_target(target_path, save_pic=save_pic)
         assert target_point is not None, 'TARGET [{}] NOT FOUND IN SCREEN'.format(target_path)
         self.player.tap(target_point, duration=duration)
 
