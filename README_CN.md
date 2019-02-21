@@ -98,7 +98,7 @@ pip install -e .
 
 - [pyminitouch](https://github.com/williamfzc/pyminitouch): ui操作
 - [findit](https://github.com/williamfzc/findit): 目标检测
-- [fastcap]ttp(hs://github.com/williamfzc/fastcap): 快速获取截图
+- [fastcap](https://github.com/williamfzc/fastcap): 快速获取截图
 - [pyatool](https://github.com/williamfzc/pyatool): 非ui操作
 
 # 协议
