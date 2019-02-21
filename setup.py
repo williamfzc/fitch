@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='fitch',
-    version='0.2.0',
+    version='0.2.1',
     description='UI automation based on opencv',
     author='williamfzc',
     author_email='fengzc@vip.qq.com',
