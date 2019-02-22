@@ -1,15 +1,14 @@
 from unittest import TestLoader, TestSuite
 from HtmlTestRunner import HTMLTestRunner
 from cases.test_wechat import TestWechat
+from cases.test_wechat_2 import TestWechat2
 from cases import target_device
 
 
-# load your cases
-test_wechat = TestLoader().loadTestsFromTestCase(TestWechat)
-
 # and add them in suite
 suite = TestSuite([
-    test_wechat,
+    TestLoader().loadTestsFromTestCase(TestWechat),
+    TestLoader().loadTestsFromTestCase(TestWechat2),
 ])
 
 runner = HTMLTestRunner(output='sample_suite')

@@ -4,7 +4,7 @@ from .base_case import SFTestCase
 from . import target_device
 
 
-class TestWechat(SFTestCase):
+class TestWechat2(SFTestCase):
     f_device = target_device
     f_device_kill_after_usage = False
 

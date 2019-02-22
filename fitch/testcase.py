@@ -70,6 +70,8 @@ class FTestCase(unittest.TestCase):
     """
     f_device_id: str = None
     f_device: FDevice = None
+    f_device_kill_after_usage: bool = True
+
     f_pic_store: FPicStore = FPicStore()
 
     # current screen shot will be saved here, if you already called f_save_pic.
@@ -83,7 +85,7 @@ class FTestCase(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if cls.f_device:
+        if cls.f_device and cls.f_device_kill_after_usage:
             cls.f_stop_device()
             cls.f_device = None
         cls.f_device_id = None
