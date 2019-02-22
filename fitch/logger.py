@@ -26,5 +26,8 @@ import time
 from loguru import logger
 
 
-log_file = os.path.join(os.getcwd(), 'fitch_{}.log'.format(str(int(time.time()))))
+log_dir = os.path.join(os.getcwd(), 'log')
+os.makedirs(log_dir, exist_ok=True)
+
+log_file = os.path.join(log_dir, 'fitch_{}.log'.format(str(int(time.time()))))
 logger.add(log_file)
