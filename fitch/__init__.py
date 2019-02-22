@@ -22,4 +22,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 from fitch.testcase import FTestCase
-from fitch.screen import FDevice
+from fitch.device import FDevice

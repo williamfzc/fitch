@@ -24,7 +24,7 @@ SOFTWARE.
 import unittest
 import os
 
-from fitch.screen import FDevice
+from fitch.device import FDevice
 from fitch.logger import logger
 
 

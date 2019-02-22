@@ -1,4 +1,4 @@
-from fitch.screen import FDevice
+from fitch.device import FDevice
 
 
-target_device = FDevice('123456F')
+target_device = FDevice('3d33076e')
