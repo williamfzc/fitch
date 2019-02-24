@@ -1,12 +1,11 @@
 import time
 
 from .base_case import SFTestCase
-from . import target_device
+from .config import target_device_id
 
 
 class TestWechat2(SFTestCase):
-    f_device = target_device
-    f_device_kill_after_usage = False
+    f_device_id = target_device_id
 
     def setUp(self):
         # save screenshot after test

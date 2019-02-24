@@ -8,6 +8,10 @@ class SFTestCase(FTestCase):
     KEY_CODE_HOME = 3
     KEY_CODE_RECENT = 187
 
+    # default value is True
+    # if it is False, device would not be killed at the end of test case
+    f_device_kill_after_usage = False
+
     # this function can be directly used in case
     def clean_recent(self):
         self.f_init_store('pictures/global')
