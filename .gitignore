@@ -115,3 +115,11 @@ dmypy.json
 
 # .idea
 .idea/
+
+# mac
+.DS_Store
+
+# sample
+sample/cur_screen_shot
+sample/log
+sample/reports
