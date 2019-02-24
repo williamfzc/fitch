@@ -24,7 +24,7 @@ SOFTWARE.
 import unittest
 import os
 
-from fitch.device import FDevice
+from fitch.device import FDevice, FDeviceManager
 from fitch.logger import logger
 
 
@@ -70,6 +70,8 @@ class FTestCase(unittest.TestCase):
     """
     f_device_id: str = None
     f_device: FDevice = None
+
+    # if it is False, device would not be killed at the end of test case
     f_device_kill_after_usage: bool = True
 
     f_pic_store: FPicStore = FPicStore()
@@ -110,14 +112,16 @@ class FTestCase(unittest.TestCase):
         """ init device, and return it """
         assert cls.f_device_id, 'should set your device id first, likes `cls.f_device_id="1234F"`'
         assert not cls.f_device, 'device {} already existed, should not be re-init'.format(device_id)
-        cls.f_device = FDevice(device_id)
+
+        cls.f_device = FDeviceManager.add(device_id)
         logger.info('DEVICE {} INIT FINISHED'.format(device_id))
         return cls.f_device
 
     @classmethod
     def f_stop_device(cls):
         """ stop device after usage """
-        cls.f_device and cls.f_device.stop()
+        cls.f_device = None
+        FDeviceManager.remove(cls.f_device_id)
         logger.info('DEVICE {} STOPPED'.format(cls.f_device_id))
 
     @classmethod

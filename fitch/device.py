@@ -24,6 +24,7 @@ SOFTWARE.
 import tempfile
 import os
 import shutil
+import atexit
 
 from fitch.logger import logger
 from fitch.utils import is_device_connected
@@ -38,9 +39,35 @@ class FDevice(object):
     def __init__(self, device_id: str):
         assert is_device_connected(device_id), 'device {} not connected'.format(device_id)
         self.device_id = device_id
-        self.mnc = MNCDevice(device_id)
-        self.player = ActionPlayer(device_id)
-        self.toolkit = PYAToolkit(device_id)
+
+        self.mnc = None
+        self.player = None
+        self.toolkit = None
+
+        self.start()
+
+    def start(self):
+        """ start device """
+        self.mnc = MNCDevice(self.device_id)
+        self.player = ActionPlayer(self.device_id)
+        self.toolkit = PYAToolkit(self.device_id)
+
+        logger.info('FDevice [{}] STARTED'.format(self.device_id))
+
+    def stop(self):
+        """ stop device, and clean up """
+        self.player and self.player.stop()
+
+        self.mnc = None
+        self.player = None
+        self.toolkit = None
+
+        logger.info('FDevice [{}] STOPPED'.format(self.device_id))
+
+    def reset(self):
+        """ stop and restart device """
+        self.stop()
+        self.start()
 
     def screen_shot(self) -> str:
         """ screen shot and return its path """
@@ -50,11 +77,6 @@ class FDevice(object):
         self.mnc.export_screen(temp_pic_name)
         logger.info('SCREEN SHOT SAVED IN [{}]'.format(temp_pic_name))
         return temp_pic_name
-
-    def stop(self):
-        """ stop device, and clean up """
-        self.player.stop()
-        logger.info('fDevice {} STOPPED'.format(self.device_id))
 
     def find_target(self, target_path: str, save_pic: str = None) -> (list, tuple):
         """ find target pic in screen, and get its position (or None) """
@@ -78,6 +100,44 @@ class FDevice(object):
         assert target_point is not None, 'TARGET [{}] NOT FOUND IN SCREEN'.format(target_path)
         self.player.tap(target_point, duration=duration)
 
+
+class FDeviceManager(object):
+    _device_dict = dict()
+
+    @classmethod
+    def add(cls, target_device_id: str) -> FDevice:
+        if not cls.is_device_available(target_device_id):
+            new_device = FDevice(target_device_id)
+            cls._device_dict[target_device_id] = new_device
+            logger.info('DEVICE [{}] REGISTER FINISHED'.format(target_device_id))
+            return new_device
+
+        # or, reuse old device
+        logger.info('DEVICE [{}] ALREADY REGISTERED, REUSE'.format(target_device_id))
+        return cls._device_dict[target_device_id]
+
+    @classmethod
+    def remove(cls, target_device_id: str):
+        if not cls.is_device_available(target_device_id):
+            logger.warning('DEVICE [{}] NOT EXISTED')
+            return
+        target_device = cls._device_dict[target_device_id]
+        target_device.stop()
+        del cls._device_dict[target_device_id]
+
+    @classmethod
+    def is_device_available(cls, device_id: str) -> bool:
+        return device_id in cls._device_dict
+
+    @classmethod
+    def clean(cls):
+        device_id_list = cls._device_dict.keys()
+        for each_device_id in device_id_list:
+            cls.remove(each_device_id)
+
+
+# TODO auto-kill or managed by developer?
+atexit.register(FDeviceManager.clean)
 
 if __name__ == '__main__':
     d = FDevice('3d33076e')
