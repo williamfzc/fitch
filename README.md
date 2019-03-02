@@ -14,7 +14,7 @@
 
 # 使用
 
-我们提供了一个[实例项目](https://github.com/williamfzc/fitch-sample)用于让开发者快速了解熟悉[fitch] :)
+我们提供了一个[实例项目](https://github.com/williamfzc/fitch-sample)用于让开发者快速了解熟悉 fitch :)
 
 它非常简单！
 
