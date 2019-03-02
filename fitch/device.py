@@ -131,7 +131,7 @@ class FDeviceManager(object):
 
     @classmethod
     def clean(cls):
-        device_id_list = cls._device_dict.keys()
+        device_id_list = list(cls._device_dict.keys())
         for each_device_id in device_id_list:
             cls.remove(each_device_id)
 
