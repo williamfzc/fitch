@@ -74,6 +74,8 @@ class FTestCase(unittest.TestCase):
     # if it is False, device would not be killed at the end of test case
     f_device_kill_after_usage: bool = True
 
+    # root path of pic store
+    f_pic_store_root: str = None
     f_pic_store: FPicStore = FPicStore()
 
     # current screen shot will be saved here, if you already called f_save_pic.
@@ -104,7 +106,8 @@ class FTestCase(unittest.TestCase):
         """
         init pic store, and you can access them directly. it can be called multiple times.
         """
-        full_pic_dir_path = os.path.join(os.getcwd(), pic_dir_path)
+        root_path = cls.f_pic_store_root or os.getcwd()
+        full_pic_dir_path = os.path.join(root_path, pic_dir_path)
         cls.f_pic_store.load(full_pic_dir_path)
 
     @classmethod
