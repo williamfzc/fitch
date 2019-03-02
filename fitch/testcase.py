@@ -79,13 +79,16 @@ class FTestCase(unittest.TestCase):
     f_pic_store: FPicStore = FPicStore()
 
     # current screen shot will be saved here, if you already called f_save_pic.
-    f_save_pic_path: str = None
+    f_runtime_pic_dir_path: str = None
 
     @classmethod
     def setUpClass(cls):
         if not cls.f_device:
             cls.f_init_device(cls.f_device_id)
         cls.f_device_id = cls.f_device.device_id
+
+        if cls.f_runtime_pic_dir_path is not None:
+            cls.f_save_runtime_pic(cls.f_runtime_pic_dir_path)
 
     @classmethod
     def tearDownClass(cls):
@@ -95,11 +98,11 @@ class FTestCase(unittest.TestCase):
         cls.f_device_id = None
 
     @classmethod
-    def f_save_pic(cls, target_dir_path: str):
+    def f_save_runtime_pic(cls, target_dir_path: str):
         """ will save current screen shot to target_dir_path after f_find_target, for checking after test """
         if not os.path.isdir(target_dir_path):
             os.makedirs(target_dir_path)
-        cls.f_save_pic_path = target_dir_path
+        cls.f_runtime_pic_dir_path = target_dir_path
 
     @classmethod
     def f_init_store(cls, pic_dir_path: str):
@@ -178,6 +181,6 @@ class FTestCase(unittest.TestCase):
     def _get_current_screen_target_path(cls, target_pic_path: str):
         """ get basename of target_pic_path, and generate target path of current screenshot """
         new_pic_name = '{}_{}'.format(cls.__name__, os.path.basename(target_pic_path))
-        if cls.f_save_pic_path:
-            return os.path.join(cls.f_save_pic_path, new_pic_name)
+        if cls.f_runtime_pic_dir_path:
+            return os.path.join(cls.f_runtime_pic_dir_path, new_pic_name)
         return None
