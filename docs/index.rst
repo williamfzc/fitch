@@ -12,7 +12,7 @@ Welcome to fitch's documentation!
 
 FDevice
 =======
-.. autoclass:: fitch.screen.FDevice
+.. autoclass:: fitch.device.FDevice
    :members:
    :show-inheritance:
    :undoc-members:
