@@ -39,11 +39,11 @@ from pyatool import PYAToolkit
 class FDevice(object):
     def __init__(self, device_id: str):
         assert is_device_connected(device_id), 'device {} not connected'.format(device_id)
-        self.device_id = device_id
+        self.device_id: str = device_id
 
-        self.mnc = None
-        self.player = None
-        self.toolkit = None
+        self.mnc: MNCDevice = None
+        self.player: ActionPlayer = None
+        self.toolkit: PYAToolkit = None
 
         self.start()
 
