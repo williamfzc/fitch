@@ -146,7 +146,7 @@ class FTestCase(unittest.TestCase):
         return cls.f_device.tap_target(target_pic_path, duration, save_pic=current_screen_target_path)
 
     @classmethod
-    def f_snapshot(cls, name: str = None):
+    def f_snapshot(cls, name: str = None) -> str:
         """ take a screen shot and do nothing, for checking after test. """
         assert cls.f_runtime_pic_dir_path is not None, 'set f_runtime_pic_dir_path first'
 
@@ -163,6 +163,7 @@ class FTestCase(unittest.TestCase):
 
         logger.info('SNAPSHOT SAVED IN [{}]'.format(pic_path))
         cls.f_device.screen_shot(save_to=pic_path)
+        return pic_path
 
     @classmethod
     def f_reset(cls):
