@@ -24,6 +24,7 @@ SOFTWARE.
 import tempfile
 import os
 import shutil
+import uuid
 import atexit
 
 from fitch.logger import logger
@@ -69,14 +70,26 @@ class FDevice(object):
         self.stop()
         self.start()
 
-    def screen_shot(self) -> str:
-        """ screen shot and return its path """
-        temp_pic = tempfile.NamedTemporaryFile('w+', delete=False, suffix='.png')
-        temp_pic_name = temp_pic.name
+    def screen_shot(self, save_to=None) -> str:
+        """ screen shot and return its path (YOU SHOULD REMOVE IT BY YOURSELF!) """
         self.mnc.screen_shot()
-        self.mnc.export_screen(temp_pic_name)
-        logger.info('SCREEN SHOT SAVED IN [{}]'.format(temp_pic_name))
-        return temp_pic_name
+
+        # save to specific place
+        if save_to:
+            if os.path.isdir(save_to):
+                pic_name = '{}.png'.format(uuid.uuid1())
+                final_path = os.path.join(save_to, pic_name)
+            else:
+                final_path = save_to
+        # use tempfile
+        else:
+            temp_pic = tempfile.NamedTemporaryFile('w+', delete=False, suffix='.png')
+            temp_pic_name = temp_pic.name
+            final_path = temp_pic_name
+
+        self.mnc.export_screen(final_path)
+        logger.info('SCREEN SHOT SAVED IN [{}]'.format(final_path))
+        return final_path
 
     def find_target(self, target_path: str, save_pic: str = None) -> (list, tuple):
         """ find target pic in screen, and get its position (or None) """
@@ -141,5 +154,5 @@ atexit.register(FDeviceManager.clean)
 
 if __name__ == '__main__':
     d = FDevice('3d33076e')
-    d.screen_shot()
+    d.screen_shot('../docs')
     d.stop()
