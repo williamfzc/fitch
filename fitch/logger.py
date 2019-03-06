@@ -25,6 +25,7 @@ import os
 import datetime
 import random
 import string
+import sys
 from loguru import logger
 
 
@@ -36,5 +37,10 @@ random_char = ''.join(random.sample(string.ascii_letters + string.digits, 4))
 # build timestamp
 timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
+# save entire log to file
 log_file = os.path.join(log_dir, 'fitch_{}_{}.log'.format(timestamp, random_char))
 logger.add(log_file)
+
+# ignore the third-party library by default
+logger.disable('pyminitouch')
+logger.disable('fastcap')

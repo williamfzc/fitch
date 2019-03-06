@@ -37,7 +37,7 @@ def detect(template: str, target: str) -> dict:
     fi.load_template(template)
     # and find it
     result = fi.find(target)
-    logger.info(json.dumps(result))
+    logger.debug('Detect result: {}'.format(json.dumps(result)))
     return result
 
 
@@ -47,7 +47,7 @@ def cal_location(result_dict: dict) -> (list, tuple):
     sim = data['max_val']
     target_point = data['max_loc']
     assert sim > config.CV_THRESHOLD, 'target point not found'
-    logger.info('SIM == {}, TARGET FOUND ON POSITION ({}, {})'.format(sim, *target_point))
+    logger.info('Similarity: {}. Target found: ({}, {})'.format(sim, *target_point))
     return target_point
 
 

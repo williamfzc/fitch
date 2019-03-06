@@ -53,7 +53,7 @@ class FDevice(object):
         self.player = ActionPlayer(self.device_id)
         self.toolkit = PYAToolkit(self.device_id)
 
-        logger.info('FDevice [{}] STARTED'.format(self.device_id))
+        logger.debug('FDevice [{}] started'.format(self.device_id))
 
     def stop(self):
         """ stop device, and clean up """
@@ -63,7 +63,7 @@ class FDevice(object):
         self.player = None
         self.toolkit = None
 
-        logger.info('FDevice [{}] STOPPED'.format(self.device_id))
+        logger.debug('FDevice [{}] stopped'.format(self.device_id))
 
     def reset(self):
         """ stop and restart device """
@@ -88,7 +88,7 @@ class FDevice(object):
             final_path = temp_pic_name
 
         self.mnc.export_screen(final_path)
-        logger.info('SCREEN SHOT SAVED IN [{}]'.format(final_path))
+        logger.debug('Screenshot saved in [{}]'.format(final_path))
         return final_path
 
     def find_target(self, target_path: str, save_pic: str = None) -> (list, tuple):
@@ -122,11 +122,11 @@ class FDeviceManager(object):
         if not cls.is_device_available(target_device_id):
             new_device = FDevice(target_device_id)
             cls._device_dict[target_device_id] = new_device
-            logger.info('DEVICE [{}] REGISTER FINISHED'.format(target_device_id))
+            logger.debug('Device [{}] register finished'.format(target_device_id))
             return new_device
 
         # or, reuse old device
-        logger.info('DEVICE [{}] ALREADY REGISTERED, REUSE'.format(target_device_id))
+        logger.debug('Device [{}] already registered, reuse'.format(target_device_id))
         return cls._device_dict[target_device_id]
 
     @classmethod

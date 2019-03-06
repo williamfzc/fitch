@@ -60,7 +60,7 @@ class FPicStore(object):
             each_f_pic = FPic(each_pic_path)
             each_pic_name = each_f_pic.name
             self.f_pic_dict[each_pic_name] = each_f_pic
-            logger.info('LOAD PICTURE [{}] FROM [{}]'.format(each_pic_name, each_pic_path))
+            logger.debug('Load picture [{}] from [{}]'.format(each_pic_name, each_pic_path))
 
 
 class FTestCase(unittest.TestCase):
@@ -89,6 +89,7 @@ class FTestCase(unittest.TestCase):
 
         if cls.f_runtime_pic_dir_path is not None:
             cls.f_save_runtime_pic(cls.f_runtime_pic_dir_path)
+        logger.debug('Case [{}] setup finished'.format(cls.__name__))
 
     @classmethod
     def tearDownClass(cls):
@@ -96,6 +97,7 @@ class FTestCase(unittest.TestCase):
             cls.f_stop_device()
             cls.f_device = None
         cls.f_device_id = None
+        logger.debug('Case [{}] teardown finished'.format(cls.__name__))
 
     @classmethod
     def f_save_runtime_pic(cls, target_dir_path: str):
@@ -120,7 +122,7 @@ class FTestCase(unittest.TestCase):
         assert not cls.f_device, 'device {} already existed, should not be re-init'.format(device_id)
 
         cls.f_device = FDeviceManager.add(device_id)
-        logger.info('DEVICE {} INIT FINISHED'.format(device_id))
+        logger.debug('Device [{}] init finished'.format(device_id))
         return cls.f_device
 
     @classmethod
@@ -128,7 +130,7 @@ class FTestCase(unittest.TestCase):
         """ stop device after usage """
         cls.f_device = None
         FDeviceManager.remove(cls.f_device_id)
-        logger.info('DEVICE {} STOPPED'.format(cls.f_device_id))
+        logger.debug('Device [{}] stopped'.format(cls.f_device_id))
 
     @classmethod
     def f_find_target(cls, target_pic_path: str) -> (list, tuple):
@@ -161,7 +163,7 @@ class FTestCase(unittest.TestCase):
         else:
             pic_path = cls.f_runtime_pic_dir_path
 
-        logger.info('SNAPSHOT SAVED IN [{}]'.format(pic_path))
+        logger.info('Snapshot saved in [{}]'.format(pic_path))
         cls.f_device.screen_shot(save_to=pic_path)
         return pic_path
 
