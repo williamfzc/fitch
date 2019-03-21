@@ -26,6 +26,7 @@ import os
 import shutil
 import uuid
 import atexit
+import contextlib
 
 from fitch.logger import logger
 from fitch.utils import is_device_connected
@@ -114,6 +115,14 @@ class FDevice(object):
         self.player.tap(target_point, duration=duration)
 
 
+@contextlib.contextmanager
+def safe_device(device_id: str) -> FDevice:
+    """ support 'with' """
+    new_device = FDevice(device_id)
+    yield new_device
+    new_device.stop()
+
+
 class FDeviceManager(object):
     _device_dict = dict()
 
@@ -153,6 +162,10 @@ class FDeviceManager(object):
 atexit.register(FDeviceManager.clean)
 
 if __name__ == '__main__':
-    d = FDevice('3d33076e')
-    d.screen_shot('../docs')
-    d.stop()
+    with safe_device('3d33076e') as d:
+        d.screen_shot('../docs')
+
+    # normal way
+    # d = FDevice('3d33076e')
+    # d.screen_shot('../docs')
+    # d.stop()
