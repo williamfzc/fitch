@@ -4,9 +4,9 @@ USER root
 WORKDIR /root
 
 # install dependencies
-RUN pip install --no-cache html-testRunner \
+RUN pip install --no-cache html-testRunner loguru \
     && apt-get update \
-    && apt-get install -y git wget zip adb \
+    && apt-get install -y git wget zip android-tools-adb \
     && apt-get install -y libglib2.0 libsm6 libxrender1 libxext-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
