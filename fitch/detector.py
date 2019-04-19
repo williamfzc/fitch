@@ -36,7 +36,7 @@ def detect(template: str, target: str) -> dict:
     # load template picture
     fi.load_template(template)
     # and find it
-    result = fi.find(target)
+    result = fi.find(target, scale=config.CV_PIC_SCALE)
     logger.debug('Detect result: {}'.format(json.dumps(result)))
     return result
 

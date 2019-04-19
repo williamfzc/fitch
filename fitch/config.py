@@ -42,3 +42,7 @@ DEFAULT_CHARSET = 'utf-8'
 # TODO SQDIFF is not supported now ( it takes min value, but default is max value. )
 CV_METHOD = cv2.TM_CCOEFF_NORMED
 CV_THRESHOLD = 0.8
+
+# 图像模板的缩放范围
+# (1, 3, 10) 即 在 1-3 倍范围内，等距离取10张图片进行匹配
+CV_PIC_SCALE = (1, 3, 10)
