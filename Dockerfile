@@ -4,7 +4,7 @@ USER root
 WORKDIR /root
 
 # install dependencies
-RUN pip install --no-cache html-testRunner loguru \
+RUN pip install --no-cache html-testRunner \
     && apt-get update \
     && apt-get install -y git wget zip android-tools-adb \
     && apt-get install -y libglib2.0 libsm6 libxrender1 libxext-dev \
@@ -14,7 +14,7 @@ RUN pip install --no-cache html-testRunner loguru \
 # install from source
 RUN git clone https://github.com/williamfzc/fitch.git \
     && cd fitch \
-    && pip install --no-cache .
+    && pip install .
 
 ENV PATH $PATH:/root/platform-tools
 
