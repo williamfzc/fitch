@@ -20,6 +20,8 @@
 
 # 如何运作
 
+![structure](./docs/structure.svg)
+
 得益于 [minitouch](https://github.com/openstf/minitouch) / [minicap](https://github.com/openstf/minicap) / [opencv](https://github.com/skvark/opencv-python) 的存在，让 fitch 能够维持高效地运转，即便它是用python写的。
 
 - 获得手机屏幕截图（[fastcap](https://github.com/williamfzc/fastcap)）
