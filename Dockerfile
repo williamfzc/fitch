@@ -4,7 +4,7 @@ USER root
 WORKDIR /root
 
 # install dependencies
-RUN pip install --no-cache html-testRunner \
+RUN pip install --no-cache-dir html-testRunner \
     && apt-get update \
     && apt-get install -y git wget zip android-tools-adb \
     && apt-get install -y libglib2.0 libsm6 libxrender1 libxext-dev \
@@ -14,9 +14,7 @@ RUN pip install --no-cache html-testRunner \
 # install from source
 RUN git clone https://github.com/williamfzc/fitch.git \
     && cd fitch \
-    && pip install .
-
-ENV PATH $PATH:/root/platform-tools
+    && pip install --no-cache-dir .
 
 # init adb (adb always fails at the first time)
 RUN adb start-server || echo "init adb"
