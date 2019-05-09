@@ -28,15 +28,16 @@ from findit import FindIt
 from fitch import config
 from fitch.logger import logger
 
+FindIt.set_cv_method(config.CV_METHOD_NAME)
+
 
 def detect(template: str, target: str) -> dict:
     fi = FindIt()
-    # change config
-    fi.config.cv_method = config.CV_METHOD
     # load template picture
     fi.load_template(template)
     # and find it
     result = fi.find(target, scale=config.CV_PIC_SCALE)
+    fi.reset()
     logger.debug('Detect result: {}'.format(json.dumps(result)))
     return result
 

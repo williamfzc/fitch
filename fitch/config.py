@@ -39,8 +39,8 @@ ADB_EXECUTOR = 'adb'
 DEFAULT_CHARSET = 'utf-8'
 
 # detector cv method
-# TODO SQDIFF is not supported now ( it takes min value, but default is max value. )
-CV_METHOD = cv2.TM_CCOEFF_NORMED
+# SQDIFF is not supported now ( it takes min value, but default is max value. )
+CV_METHOD_NAME = 'cv2.TM_CCOEFF_NORMED'
 CV_THRESHOLD = 0.8
 
 # 图像模板的缩放范围
