@@ -28,11 +28,10 @@ from findit import FindIt
 from fitch import config
 from fitch.logger import logger
 
-FindIt.set_cv_method(config.CV_METHOD_NAME)
+fi = FindIt(cv_method_name=config.CV_METHOD_NAME)
 
 
 def detect(template: str, target: str) -> dict:
-    fi = FindIt()
     # load template picture
     fi.load_template(template)
     # and find it

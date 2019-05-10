@@ -30,7 +30,7 @@
 
 # 安装
 
-只支持python3。
+Python 3.6 +
 
 ## 从 pypi 安装
 
