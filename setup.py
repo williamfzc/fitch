@@ -11,7 +11,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pyminitouch',
-        'findit',
+        'findit==0.3.1',
         'fastcap',
         'pyatool',
         'loguru',
