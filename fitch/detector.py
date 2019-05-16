@@ -28,26 +28,34 @@ from findit import FindIt
 from fitch import config
 from fitch.logger import logger
 
-fi = FindIt(cv_method_name=config.CV_METHOD_NAME)
+TEMP_TEMPLATE_NAME = 'cur_template'
+TEMP_TARGET_NAME = 'cur_target'
+
+fi = FindIt(
+    engine=['template'],
+    engine_template_cv_method_name=config.CV_METHOD_NAME,
+    engine_template_scale=config.CV_PIC_SCALE,
+    pro_mode=True,
+)
 
 
 def detect(template: str, target: str) -> dict:
     # load template picture
-    fi.load_template(template)
+    fi.load_template(TEMP_TEMPLATE_NAME, pic_path=template)
     # and find it
-    result = fi.find(target, scale=config.CV_PIC_SCALE)
-    fi.reset()
+    result = fi.find(TEMP_TARGET_NAME, target_pic_path=target)
+    fi.clear()
     logger.debug('Detect result: {}'.format(json.dumps(result)))
     return result
 
 
 def cal_location(result_dict: dict) -> (list, tuple):
     """ analyse result and get its position """
-    data = result_dict['data'][0]
-    sim = data['max_val']
-    target_point = data['max_loc']
-    assert sim > config.CV_THRESHOLD, 'target point not found'
-    logger.info('Similarity: {}. Target found: ({}, {})'.format(sim, *target_point))
+    result_dict = result_dict['data'][TEMP_TEMPLATE_NAME]['TemplateEngine']
+    target_point = result_dict['target_point']
+    target_sim = result_dict['target_sim']
+    assert target_sim > config.CV_THRESHOLD, 'target point not found'
+    logger.info('Similarity: {}. Target found: ({}, {})'.format(target_sim, *target_point))
     return target_point
 
 
