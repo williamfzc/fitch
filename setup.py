@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-
 setup(
     name='fitch',
     version='0.3.3',
