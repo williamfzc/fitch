@@ -24,6 +24,7 @@ SOFTWARE.
 import json
 
 from findit import FindIt
+from findit_client import FindItStandardClient
 
 from fitch import config
 from fitch.logger import logger
@@ -38,8 +39,19 @@ fi = FindIt(
     pro_mode=True,
 )
 
+fi_client = FindItStandardClient(
+    host=config.FINDIT_SERVER_IP,
+    port=config.FINDIT_SERVER_PORT,
+)
 
-def detect(template: str, target: str) -> dict:
+
+def detect(*args, **kwargs):
+    if not config.REMOTE_MODE:
+        return detect_local(*args, **kwargs)
+    return detect_remote(*args, **kwargs)
+
+
+def detect_local(template: str, target: str) -> dict:
     # load template picture
     fi.load_template(TEMP_TEMPLATE_NAME, pic_path=template)
     # and find it
@@ -49,16 +61,27 @@ def detect(template: str, target: str) -> dict:
     return result
 
 
+def detect_remote(template: str, target: str) -> dict:
+    result = fi_client.analyse_with_path(target, template, pro_mode=True)
+    assert result['status'] == 'OK', 'remote server error: {}'.format(json.dumps(result))
+
+    result = result['response']
+    logger.debug('Detect remote result: {}'.format(json.dumps(result)))
+    return result
+
+
 def cal_location(result_dict: dict) -> (list, tuple):
     """ analyse result and get its position """
-    result_dict = result_dict['data'][TEMP_TEMPLATE_NAME]['TemplateEngine']
-    target_point = result_dict['target_point']
-    target_sim = result_dict['target_sim']
+    # TODO not a good design here
+    result_dict = list(result_dict['data'].values())[0]['TemplateEngine']['raw']
+
+    target_point = result_dict['max_loc']
+    target_sim = result_dict['max_val']
     assert target_sim > config.CV_THRESHOLD, 'target point not found'
     logger.info('Similarity: {}. Target found: ({}, {})'.format(target_sim, *target_point))
     return target_point
 
 
 if __name__ == '__main__':
-    res = detect('../point.png', '../screen.png')
+    res = detect_local('../point.png', '../screen.png')
     print(res)

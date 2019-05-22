@@ -26,6 +26,7 @@ import os
 
 from fitch.device import FDevice, FDeviceManager
 from fitch.logger import logger
+from fitch import config
 
 
 class FPic(object):
@@ -51,6 +52,8 @@ class FPicStore(object):
     def __getattr__(self, item):
         if item in self.f_pic_dict:
             return self.f_pic_dict[item].path
+        if config.REMOTE_MODE:
+            return item
         raise FileNotFoundError('picture {} file not found'.format(item))
 
     def load(self, pic_dir_path):
