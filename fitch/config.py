@@ -44,7 +44,7 @@ CV_THRESHOLD = 0.8
 
 # 图像模板的缩放范围
 # (1, 3, 10) 即 在 1-3 倍范围内，等距离取10张图片进行匹配
-CV_PIC_SCALE = (1, 3, 10)
+CV_PIC_SCALE = (0.5, 2, 10)
 
 # findit relative
 FINDIT_SERVER_IP = '172.17.204.2'

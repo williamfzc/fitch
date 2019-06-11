@@ -27,6 +27,7 @@ import shutil
 import uuid
 import atexit
 import contextlib
+import typing
 
 from fitch.logger import logger
 from fitch.utils import is_device_connected
@@ -108,10 +109,19 @@ class FDevice(object):
             return None
         return target_point
 
-    def tap_target(self, target_path: str, duration: int = 100, save_pic: str = None):
+    def tap_target(self, target_path: str, duration: int = None, save_pic: str = None) -> bool:
         """ find target pic in screen, get its position, and tap it """
         target_point = self.find_target(target_path, save_pic=save_pic)
-        assert target_point is not None, 'TARGET [{}] NOT FOUND IN SCREEN'.format(target_path)
+        if target_point is None:
+            return False
+        self.tap_point(target_point, duration)
+        return True
+
+    def tap_point(self, target_point: typing.Sequence, duration: int = None):
+        """ tap a location directly """
+        if not duration:
+            duration = 100
+
         self.player.tap(target_point, duration=duration)
 
 
@@ -119,8 +129,10 @@ class FDevice(object):
 def safe_device(device_id: str) -> FDevice:
     """ support 'with' """
     new_device = FDevice(device_id)
-    yield new_device
-    new_device.stop()
+    try:
+        yield new_device
+    finally:
+        new_device.stop()
 
 
 class FDeviceManager(object):
