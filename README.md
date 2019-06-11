@@ -8,15 +8,78 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/de3e2f35842f80a26ed3/maintainability)](https://codeclimate.com/github/williamfzc/fitch/maintainability)
 [![PyPI version](https://badge.fury.io/py/fitch.svg)](https://badge.fury.io/py/fitch)
 [![Documentation Status](https://readthedocs.org/projects/fitch/badge/?version=latest)](https://fitch.readthedocs.io/en/latest/?badge=latest)
-[English README](README_en.md)
 
 ---
 
 # 使用
 
-我们提供了一个[实例项目](https://github.com/williamfzc/fitch-sample)用于让开发者快速了解熟悉 fitch :)
+## 创建与销毁
 
-它非常简单！
+FDevice的使用有两种方式。如果只是简单功能，你可以选择with。它会在使用结束后自动销毁设备：
+
+```python
+from fitch.device import safe_device
+
+with safe_device('123456F') as device:
+    print(device.device_id)
+```
+
+如果你希望自主控制设备：
+
+```python
+from fitch import FDevice
+
+device = FDevice('123456F')
+
+# do something
+print(device.device_id)
+
+# stop your device
+device.stop()
+```
+
+## 寻找目标
+
+```python
+TARGET_PICTURE_PATH = 'path/to/your/picture.png'
+
+point_location = device.find_target(TARGET_PICTURE_PATH)
+```
+
+当相似度未达到阈值时，返回None。否则返回坐标。你可以按照下列方法修改阈值（默认0.8）：
+
+```python
+from fitch import config
+config.CV_THRESHOLD = 0.9
+```
+
+## 点击目标
+
+```python
+TARGET_PICTURE_PATH = 'path/to/your/picture.png'
+
+result = device.tap_target(TARGET_PICTURE_PATH)
+# true or false
+```
+
+你可以直接寻找并点击图片。它会返回bool类型的结果，代表操作成功与否。
+
+## 点击坐标
+
+如果你希望让这一切更加灵活：
+
+```python
+point_location = device.find_target(TARGET_PICTURE_PATH)
+
+# some assert to check it?
+assert point_location, f'picture {TARGET_PICTURE_PATH} not existed'
+
+# tap it
+device.tap_point(point_location)
+
+# or long click?
+device.tap_point(point_location, duration=1000)
+```
 
 # 如何运作
 
