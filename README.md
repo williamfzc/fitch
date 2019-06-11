@@ -81,6 +81,16 @@ device.tap_point(point_location)
 device.tap_point(point_location, duration=1000)
 ```
 
+## 界面无关的额外操作
+
+除了ui操作外，我们可能需要一些类似adb的界面无关操作：
+
+```python
+device.extras.switch_airplane(True)
+```
+
+可以通过 extras 调用 [adbutils](https://github.com/openatx/adbutils) 中的功能。
+
 # 如何运作
 
 ![structure](./docs/structure.svg)
@@ -89,7 +99,7 @@ device.tap_point(point_location, duration=1000)
 
 - 获得手机屏幕截图（[fastcap](https://github.com/williamfzc/fastcap)）
 - 在截图上寻找目标模板，并确定它的位置（[findit](https://github.com/williamfzc/findit)）
-- 进行检查或操作（[pyminitouch](https://github.com/williamfzc/pyminitouch) & [pyatool](https://github.com/williamfzc/pyatool)）
+- 进行检查或操作（[pyminitouch](https://github.com/williamfzc/pyminitouch) & [adbutils](https://github.com/openatx/adbutils)）
 
 # 安装
 
@@ -116,7 +126,7 @@ pip install -e .
 - [pyminitouch](https://github.com/williamfzc/pyminitouch): ui操作
 - [findit](https://github.com/williamfzc/findit): 目标检测
 - [fastcap](https://github.com/williamfzc/fastcap): 快速获取截图
-- [pyatool](https://github.com/williamfzc/pyatool): 非ui操作
+- [adbutils](https://github.com/openatx/adbutils): 非ui操作
 
 # 协议
 
