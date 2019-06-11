@@ -34,6 +34,10 @@ SYSTEM_NAME = platform.system()
 NEED_SHELL = SYSTEM_NAME != 'Windows'
 ADB_EXECUTOR = 'adb'
 
+# strict mode
+# setting this True, fitch will not catch error.
+STRICT_MODE = False
+
 # encoding
 DEFAULT_CHARSET = 'utf-8'
 

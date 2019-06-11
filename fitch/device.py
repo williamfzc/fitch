@@ -32,7 +32,7 @@ import typing
 from fitch.logger import logger
 from fitch.utils import is_device_connected
 from fitch.player import ActionPlayer
-from fitch import detector
+from fitch import detector, config
 
 from fastcap import MNCDevice
 from pyatool import PYAToolkit
@@ -107,7 +107,10 @@ class FDevice(object):
 
         try:
             target_point = detector.cal_location(result)
-        except AssertionError:
+        except AssertionError as e:
+            if config.STRICT_MODE:
+                raise e
+
             # if not found, return None
             return None
         return target_point
