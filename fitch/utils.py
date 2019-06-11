@@ -24,7 +24,7 @@ SOFTWARE.
 import subprocess
 
 from fitch import config
-from fitch.logger import logger
+from loguru import logger
 
 
 def restart_adb():

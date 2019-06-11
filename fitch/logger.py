@@ -28,7 +28,12 @@ import string
 import sys
 from loguru import logger
 
+# remove default logger
+logger.remove()
+logger.add(sys.stderr, level="DEBUG")
 
+# save log to file
+# create log dir
 log_dir = os.path.join(os.getcwd(), 'log')
 os.makedirs(log_dir, exist_ok=True)
 
@@ -39,7 +44,7 @@ timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
 # save entire log to file
 log_file = os.path.join(log_dir, 'fitch_{}_{}.log'.format(timestamp, random_char))
-logger.add(log_file)
+logger.add(log_file, level="DEBUG")
 
 # ignore the third-party library by default
 logger.disable('pyminitouch')

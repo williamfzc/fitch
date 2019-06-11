@@ -25,9 +25,9 @@ import json
 
 from findit import FindIt
 from findit_client import FindItStandardClient
+from loguru import logger
 
 from fitch import config
-from fitch.logger import logger
 
 TEMP_TEMPLATE_NAME = 'cur_template'
 TEMP_TARGET_NAME = 'cur_target'

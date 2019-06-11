@@ -29,11 +29,11 @@ import atexit
 import contextlib
 import typing
 
-from fitch.logger import logger
 from fitch.utils import is_device_connected
 from fitch.player import ActionPlayer
 from fitch import detector, config
 
+from loguru import logger
 from fastcap import MNCDevice
 from pyatool import PYAToolkit
 from adbutils import adb, AdbDevice

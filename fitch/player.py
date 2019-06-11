@@ -24,7 +24,7 @@ SOFTWARE.
 from pyminitouch import MNTDevice
 import time
 
-from fitch.logger import logger
+from loguru import logger
 
 
 class ActionPlayer(object):
