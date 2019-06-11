@@ -64,6 +64,31 @@ result = device.tap_target(TARGET_PICTURE_PATH)
 
 你可以直接寻找并点击图片。它会返回bool类型的结果，代表操作成功与否。
 
+## 远程模式
+
+基于 [findit](https://github.com/williamfzc/findit)，你可以将目标图片配置到远程，之后直接使用，这样更有利于大量图片的管理。
+
+把图片配置到远程（例子中放置在 `path/to/your/remote` 目录下）：
+
+![](docs/pics/findit_server_management.png)
+
+然后像调用本地图片一样调用它即可：
+
+```python
+from fitch import config
+
+# 配置你的findit服务器
+config.REMOTE_MODE = True
+config.FINDIT_SERVER_IP = '172.17.12.34'
+config.FINDIT_SERVER_PORT = 29412
+
+# 直接使用你的远端图片
+TARGET_PICTURE_PATH = 'path/to/your/remote/picture.png'
+point_location = device.find_target(TARGET_PICTURE_PATH)
+```
+
+关于findit服务器配置可参考：https://williamfzc.github.io/findit/#/usage/client+server
+
 ## 点击坐标
 
 如果你希望让这一切更加灵活：
