@@ -36,6 +36,7 @@ from fitch import detector
 
 from fastcap import MNCDevice
 from pyatool import PYAToolkit
+from adbutils import adb, AdbDevice
 
 
 class FDevice(object):
@@ -46,6 +47,7 @@ class FDevice(object):
         self.mnc: MNCDevice = None
         self.player: ActionPlayer = None
         self.toolkit: PYAToolkit = None
+        self.extras: AdbDevice = None
 
         self.start()
 
@@ -54,6 +56,7 @@ class FDevice(object):
         self.mnc = MNCDevice(self.device_id)
         self.player = ActionPlayer(self.device_id)
         self.toolkit = PYAToolkit(self.device_id)
+        self.extras = adb.device(serial=self.device_id)
 
         logger.debug('FDevice [{}] started'.format(self.device_id))
 

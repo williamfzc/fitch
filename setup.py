@@ -14,5 +14,6 @@ setup(
         'fastcap',
         'pyatool',
         'loguru',
+        'adbutils'
     ]
 )
