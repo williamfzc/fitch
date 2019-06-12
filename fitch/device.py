@@ -103,13 +103,8 @@ class FDevice(object):
         if isinstance(target_path, str):
             target_path = [target_path]
 
-        result = detector.detect(target_path, pic_path)
-
-        if save_pic:
-            shutil.copy(pic_path, save_pic)
-        os.remove(pic_path)
-
         try:
+            result = detector.detect(target_path, pic_path)
             assert result
         except AssertionError as e:
             if config.STRICT_MODE:
@@ -117,7 +112,13 @@ class FDevice(object):
 
             # if not found, return None
             return None
-        return result
+        else:
+            return result
+        finally:
+            # always clean temp pictures
+            if save_pic:
+                shutil.copy(pic_path, save_pic)
+            os.remove(pic_path)
 
     def tap_target(self, target_path: (str, typing.Sequence), duration: int = None, save_pic: str = None) -> bool:
         """ find target pic in screen, get its position, and tap it """
