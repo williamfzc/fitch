@@ -38,6 +38,7 @@ fi_client = FindItStandardClient(
     port=config.FINDIT_SERVER_PORT,
     local_mode=not config.REMOTE_MODE,
     pic_root=config.DEFAULT_LOCAL_PIC_DIR,
+    python_path=config.DEFAULT_PYTHON_EXECUTOR,
 
     # extra args
     engine=['template'],

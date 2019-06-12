@@ -27,7 +27,7 @@ with safe_device('123456F') as device:
 如果你希望自主控制设备：
 
 ```python
-from fitch import FDevice
+from fitch.device import FDevice
 
 device = FDevice('123456F')
 
@@ -52,6 +52,19 @@ point_location = device.find_target(TARGET_PICTURE_PATH)
 from fitch import config
 config.CV_THRESHOLD = 0.9
 ```
+
+另外值得注意，所有配置的修改建议在程序一开始进行，因为一些逻辑会在import的时候就开始了。这很可能导致你的配置修改不生效：
+
+```python
+# 修改 python执行器为 python3（默认为python）
+from fitch import config
+config.DEFAULT_PYTHON_EXECUTOR = 'python3'
+
+# 在修改配置后再进行其他模块的导入，确保所有修改都是生效的
+from fitch.device import FDevice
+```
+
+当然这么写可能不是很优雅，你可以在自己的程序中琢磨一下怎么设计更好。
 
 ## 点击目标
 
