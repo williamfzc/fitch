@@ -96,9 +96,13 @@ class FDevice(object):
         logger.debug('Screenshot saved in [{}]'.format(final_path))
         return final_path
 
-    def find_target(self, target_path: str, save_pic: str = None) -> (list, tuple):
+    def find_target(self, target_path: (str, typing.Sequence), save_pic: str = None) -> (list, tuple):
         """ find target pic in screen, and get its position (or None) """
         pic_path = self.screen_shot()
+
+        if isinstance(target_path, str):
+            target_path = [target_path]
+
         result = detector.detect(target_path, pic_path)
 
         if save_pic:
@@ -106,21 +110,26 @@ class FDevice(object):
         os.remove(pic_path)
 
         try:
-            target_point = detector.cal_location(result)
+            assert result
         except AssertionError as e:
             if config.STRICT_MODE:
                 raise e
 
             # if not found, return None
             return None
-        return target_point
+        return result
 
-    def tap_target(self, target_path: str, duration: int = None, save_pic: str = None) -> bool:
+    def tap_target(self, target_path: (str, typing.Sequence), duration: int = None, save_pic: str = None) -> bool:
         """ find target pic in screen, get its position, and tap it """
+        if isinstance(target_path, str):
+            target_path = [target_path]
+
         target_point = self.find_target(target_path, save_pic=save_pic)
         if target_point is None:
             return False
-        self.tap_point(target_point, duration)
+
+        for each_point in target_point:
+            self.tap_point(each_point, duration)
         return True
 
     def tap_point(self, target_point: typing.Sequence, duration: int = None):
