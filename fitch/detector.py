@@ -52,9 +52,9 @@ def get_name_from_path(file_path: str) -> str:
     return file_path.split(os.sep)[-1]
 
 
-# TODO: https://github.com/williamfzc/findit-client/issues/2
-def detect(template: typing.Sequence, target: str):
-    result = fi_client.get_target_point_list_with_path(
+def detect(template: typing.Sequence, target: str) -> list:
+    """ return a point list """
+    result = fi_client.get_target_point_with_path(
         target, template, threshold=config.CV_THRESHOLD)
     logger.debug('Detect result: {}'.format(json.dumps(result)))
     return result

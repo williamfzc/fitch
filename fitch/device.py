@@ -105,6 +105,7 @@ class FDevice(object):
 
         try:
             result = detector.detect(target_path, pic_path)
+            logger.info(f'detector result: {result}')
             assert result
         except AssertionError as e:
             if config.STRICT_MODE:
@@ -125,12 +126,15 @@ class FDevice(object):
         if isinstance(target_path, str):
             target_path = [target_path]
 
-        target_point = self.find_target(target_path, save_pic=save_pic)
-        if target_point is None:
+        target_list = self.find_target(target_path, save_pic=save_pic)
+        if target_list is None:
             return False
 
-        for each_point in target_point:
-            self.tap_point(each_point, duration)
+        logger.info(f'ready to tap: {target_list} ...')
+        for each_target in target_list:
+            # each target can display multi times
+            for each_point in each_target:
+                self.tap_point(each_point, duration)
         return True
 
     def tap_point(self, target_point: typing.Sequence, duration: int = None):
