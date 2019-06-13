@@ -1,5 +1,0 @@
-pyminitouch
-findit
-fastcap
-pyatool
-loguru
