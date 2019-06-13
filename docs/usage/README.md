@@ -118,4 +118,4 @@ device.extras.switch_airplane(True)
 
 ## 一个完整的例子
 
-可以参考 [sample.py](sample/sample.py)
+可以参考 [sample.py](https://github.com/williamfzc/fitch/blob/master/sample/sample.py)
