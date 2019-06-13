@@ -129,6 +129,10 @@ device.extras.switch_airplane(True)
 
 可以通过 extras 调用 [adbutils](https://github.com/openatx/adbutils) 中的功能。
 
+## 一个完整的例子
+
+可以参考 [sample.py](sample/sample.py)
+
 # 如何运作
 
 ![structure](./docs/structure.svg)
