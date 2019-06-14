@@ -21,34 +21,67 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from pyminitouch import MNTDevice
-import time
-
-from loguru import logger
+from pyminitouch import MNTDevice, CommandBuilder
 
 
 class ActionPlayer(object):
     def __init__(self, device_id: str):
         self.device_id = device_id
         self.mnt = MNTDevice(device_id)
+        self.cmd_builder = CommandBuilder()
 
     def stop(self):
         self.mnt.stop()
 
-    def tap(self, point: (list, tuple), duration=100):
-        x, y = map(int, point)
-        logger.info('Tap point: ({}, {})'.format(x, y))
-        self.mnt.tap([(x, y)], duration=duration)
+    def tap(self, point: (list, tuple), duration: int = 100, no_up: bool = None):
+        self.mnt.tap([point], duration=duration, no_up=no_up)
 
-        # add 50ms for syncing status
-        time.sleep((duration + 50) / 1000)
+    def short_tap(self, point: (list, tuple), *args, **kwargs):
+        self.tap(point, duration=100, *args, **kwargs)
 
-    def long_tap(self, point: (list, tuple), duration: int=1000):
-        self.tap(point, duration)
+    def long_tap(self, point: (list, tuple), *args, **kwargs):
+        self.tap(point, duration=1000, *args, **kwargs)
 
-    def swipe(self, point1: (list, tuple), point2: (list, tuple), duration: int = 1, part: int = 10):
-        self.mnt.ext_smooth_swipe([point1, point2], duration=duration, part=part)
-        time.sleep((duration + 50) / 1000)
+    def swipe(self,
+              point1: (list, tuple),
+              point2: (list, tuple),
+              duration: int = None,
+              part: int = None,
+              no_down: bool=None,
+              no_up: bool=None):
+
+        if not duration:
+            duration = 1
+        if not part:
+            part = 20
+
+        self.mnt.ext_smooth_swipe(
+            [point1, point2],
+            duration=duration,
+            part=part,
+            no_down=no_down,
+            no_up=no_up,
+        )
+
+    def fast_swipe(self,
+                   point1: (list, tuple),
+                   point2: (list, tuple)):
+        self.swipe(point1, point2, duration=1, part=1)
+
+    def slow_swipe(self,
+                   point1: (list, tuple),
+                   point2: (list, tuple)):
+        self.swipe(point1, point2, duration=1, part=50)
+
+    # --- high level API below ---
+    def tap_and_drag(self,
+                     point1: (list, tuple),
+                     point2: (list, tuple),
+                     duration: int = None,
+                     part: int = None):
+
+        self.long_tap(point1, no_up=True)
+        self.swipe(point1, point2, duration, part, no_down=True)
 
 
 if __name__ == '__main__':

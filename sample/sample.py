@@ -12,7 +12,7 @@ config.DEFAULT_LOCAL_PIC_DIR = os.path.dirname(__file__)
 # 在配置完成后就可以开始操作设备了
 from fitch.device import FDevice
 
-device = FDevice('4df189487c7b6fef')
+device = FDevice('3d33076e')
 
 TARGET_PICTURE_PATH = 'pics/wechat_logo.png'
 
@@ -41,6 +41,11 @@ print(target_list)
 operator_result = device.tap_target(TARGET_PICTURE_PATH)
 # 操作成功与否 True or False
 print(operator_result)
+
+# 底层的API可通过 player 调用，基于minitouch实现，具备很高的灵活性
+# 可以在此基础上自由构建更高级别的API
+# 可参见 https://github.com/williamfzc/pyminitouch
+device.player.fast_swipe([100, 100], [400, 400])
 
 # 在完成后记得停止设备
 device.stop()
