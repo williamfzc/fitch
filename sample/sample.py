@@ -12,9 +12,9 @@ config.DEFAULT_LOCAL_PIC_DIR = os.path.join(os.path.dirname(__file__), 'pics')
 
 # 默认情况下会在本地启动临时的findit服务
 # 你也可以选择连接到远程的findit服务
-config.REMOTE_MODE = True
-config.FINDIT_SERVER_IP = '127.0.0.1'
-config.FINDIT_SERVER_PORT = 9410
+# config.REMOTE_MODE = True
+# config.FINDIT_SERVER_IP = '127.0.0.1'
+# config.FINDIT_SERVER_PORT = 9410
 
 # 在配置完成后就可以开始操作设备了
 from fitch.device import FDevice
@@ -32,8 +32,14 @@ print(wechat_widget)
 wechat_widget_list = device.get_widget_list(TARGET_PICTURE_PATH)
 print(wechat_widget_list)
 
+# 在获取widget之后，你可以使用device中的方法操作他们
+# FDevice中的方法的操作单元是 FWidget，而不是坐标
+# 可参见 https://github.com/williamfzc/fitch/blob/master/fitch/device.py#L145
+device.click(wechat_widget)
+
 # 底层的API可通过 player 调用，基于minitouch实现，具备很高的灵活性
 # 可以在此基础上自由构建更高级别的API
+# player中所有的操作单元是坐标，不应该引入widget的概念
 # 可参见 https://github.com/williamfzc/pyminitouch
 device.player.fast_swipe([100, 100], [400, 400])
 
