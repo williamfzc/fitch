@@ -1,10 +1,10 @@
 # 使用
 
-## 一个完整的例子
+## 完整的例子
 
 这个例子应该可以解决大多数问题：[sample.py](https://github.com/williamfzc/fitch/blob/master/sample/sample.py)
 
-## 一个结合unittest的例子
+## 结合unittest的例子
 
 与unittest一同使用的示例：[sample4unittest.py](https://github.com/williamfzc/fitch/blob/master/sample/sample4unittest.py)
 
@@ -12,6 +12,12 @@
 
 - unittest可定制化更强，pytest相对更适合轻量化的场景
 - 目前用pytest有偶现的奇怪bug
+
+## 更真实的例子：动态生成用例并用于遍历app
+
+有些情况下，我们可能需要对一些资源进行重复性较高的校验工作。
+
+这个例子将告诉你，如何利用 fitch 动态进行用例的生成与校验：[sample4checkres.py](https://github.com/williamfzc/fitch/blob/master/sample/sample4checkres.py)
 
 ## 创建与销毁
 
