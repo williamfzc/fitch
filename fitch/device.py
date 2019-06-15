@@ -144,6 +144,14 @@ class FDevice(object):
 
         self.player.tap(target_point, duration=duration)
 
+    def tap_and_drag(self,
+                     point1: (list, tuple),
+                     point2: (list, tuple),
+                     duration: int = None,
+                     part: int = None):
+        self.player.long_tap(point1, no_up=True)
+        self.player.swipe(point1, point2, duration, part, no_down=True)
+
 
 @contextlib.contextmanager
 def safe_device(device_id: str) -> FDevice:

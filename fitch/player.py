@@ -25,6 +25,7 @@ from pyminitouch import MNTDevice, CommandBuilder
 
 
 class ActionPlayer(object):
+    """ base, low level API here """
     def __init__(self, device_id: str):
         self.device_id = device_id
         self.mnt = MNTDevice(device_id)
@@ -72,16 +73,6 @@ class ActionPlayer(object):
                    point1: (list, tuple),
                    point2: (list, tuple)):
         self.swipe(point1, point2, duration=1, part=50)
-
-    # --- high level API below ---
-    def tap_and_drag(self,
-                     point1: (list, tuple),
-                     point2: (list, tuple),
-                     duration: int = None,
-                     part: int = None):
-
-        self.long_tap(point1, no_up=True)
-        self.swipe(point1, point2, duration, part, no_down=True)
 
 
 if __name__ == '__main__':
