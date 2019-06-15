@@ -4,8 +4,7 @@ USER root
 WORKDIR /root
 
 # install dependencies
-RUN pip install --no-cache-dir html-testRunner \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y git wget zip android-tools-adb \
     && apt-get install -y libglib2.0 libsm6 libxrender1 libxext-dev \
     && apt-get clean \
@@ -19,4 +18,4 @@ RUN adb start-server || echo "init adb" \
 
 # start testing
 WORKDIR /usr/src/app
-CMD ["python", "entry.py"]
+CMD ["bash"]
