@@ -8,14 +8,20 @@ restart_adb()
 
 # 修改配置需要在导入设备之前
 config.DEFAULT_PYTHON_EXECUTOR = 'python3'
-config.DEFAULT_LOCAL_PIC_DIR = os.path.dirname(__file__)
+config.DEFAULT_LOCAL_PIC_DIR = os.path.join(os.path.dirname(__file__), 'pics')
+
+# 默认情况下会在本地启动临时的findit服务
+# 你也可以选择连接到远程的findit服务
+config.REMOTE_MODE = True
+config.FINDIT_SERVER_IP = '127.0.0.1'
+config.FINDIT_SERVER_PORT = 9410
 
 # 在配置完成后就可以开始操作设备了
 from fitch.device import FDevice
 
 device = FDevice('3d33076e')
 
-TARGET_PICTURE_PATH = 'pics/wechat_logo.png'
+TARGET_PICTURE_PATH = 'wechat_logo.png'
 
 # 寻找目标，返回三维列表
 target_list = device.find_target(TARGET_PICTURE_PATH)
@@ -50,7 +56,7 @@ device.player.fast_swipe([100, 100], [400, 400])
 
 # 除了UI操作，你还可以利用 adbutils 进行方便的adb操作
 # 可参见 https://github.com/openatx/adbutils
-device.extras.keyevent(3)
+device.adb_utils.keyevent(3)
 time.sleep(2)
 
 # 在完成后记得停止设备

@@ -47,7 +47,7 @@ class FDevice(object):
         self.mnc: MNCDevice = None
         self.player: ActionPlayer = None
         self.toolkit: PYAToolkit = None
-        self.extras: AdbDevice = None
+        self.adb_utils: AdbDevice = None
 
         self.start()
 
@@ -56,7 +56,7 @@ class FDevice(object):
         self.mnc = MNCDevice(self.device_id)
         self.player = ActionPlayer(self.device_id)
         self.toolkit = PYAToolkit(self.device_id)
-        self.extras = adb.device(serial=self.device_id)
+        self.adb_utils = adb.device(serial=self.device_id)
 
         logger.debug('FDevice [{}] started'.format(self.device_id))
 

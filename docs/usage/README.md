@@ -115,7 +115,7 @@ device.tap_point(point_location, duration=1000)
 除了ui操作外，我们可能需要一些类似adb的界面无关操作：
 
 ```python
-device.extras.switch_airplane(True)
+device.adb_utils.switch_airplane(True)
 ```
 
-可以通过 extras 调用 [adbutils](https://github.com/openatx/adbutils) 中的功能。
+可以通过 adb_utils 调用 [adbutils](https://github.com/openatx/adbutils) 中的功能。
