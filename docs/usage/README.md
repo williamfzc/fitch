@@ -2,7 +2,16 @@
 
 ## 一个完整的例子
 
-我觉得这个例子可以解决大多数问题：[sample.py](https://github.com/williamfzc/fitch/blob/master/sample/sample.py)
+这个例子应该可以解决大多数问题：[sample.py](https://github.com/williamfzc/fitch/blob/master/sample/sample.py)
+
+## 一个结合unittest的例子
+
+与unittest一同使用的示例：[sample4unittest.py](https://github.com/williamfzc/fitch/blob/master/sample/sample4unittest.py)
+
+暂时不推荐使用 pytest：
+
+- unittest可定制化更强，pytest相对更适合轻量化的场景
+- 目前用pytest有偶现的奇怪bug
 
 ## 创建与销毁
 
