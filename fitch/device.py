@@ -51,78 +51,7 @@ class FWidget(object):
         return f'<fitch.device.FWidget object name={self.name} position={self.position_list}>'
 
 
-class FWidgetOperatorMixIn(object):
-    def find_target(self,
-                    target_path: typing.Union[str, list, tuple],
-                    save_pic: str = None) -> typing.Union[list, FWidget, None]:
-        """ find target pic in screen, and get widget (or None) """
-        pic_path = self.screen_shot()
-
-        if isinstance(target_path, str):
-            target_path = [target_path]
-
-        try:
-            result_dict = detector.detect(target_path, pic_path)
-            logger.info(f'detector result: {result_dict}')
-
-            result_list = list()
-            for each_target_name, each_target_result in result_dict.items():
-                each_target = FWidget(each_target_name, each_target_result)
-                result_list.append(each_target)
-
-        except AssertionError as e:
-            if config.STRICT_MODE:
-                raise e
-
-            # if not found, return None
-            return None
-        else:
-            if len(result_list) == 1:
-                return result_list[0]
-            return result_list
-        finally:
-            # always clean temp pictures
-            if save_pic:
-                shutil.copy(pic_path, save_pic)
-            os.remove(pic_path)
-
-    def tap_target(self,
-                   target_path: typing.Union[str, list, tuple],
-                   duration: int = None,
-                   save_pic: str = None,
-                   one: bool = None) -> bool:
-        """ find target pic in screen, get its position, and tap it """
-        if isinstance(target_path, str):
-            target_path = [target_path]
-
-        target_list = self.find_target(target_path, save_pic=save_pic)
-        if target_list is None:
-            return False
-
-        logger.info(f'ready to tap: {target_list} ...')
-        for each_target in target_list:
-            # operate only one point for each target
-            if one:
-                self.player.short_tap(each_target.position_list[0], duration)
-                continue
-
-            # tap all points detected
-            for each_point in each_target.position_list:
-                self.player.short_tap(each_point, duration)
-        return True
-
-    def tap_and_drag(self,
-                     widget1: FWidget,
-                     widget2: FWidget):
-
-        start_point = widget1.position_list[0]
-        end_point = widget2.position_list[0]
-
-        self.player.long_tap(start_point, no_up=True)
-        self.player.slow_swipe(start_point, end_point, no_down=True)
-
-
-class FDevice(FWidgetOperatorMixIn):
+class FDevice(object):
     """ device object, and high level API """
 
     def __init__(self, device_id: str):
@@ -180,6 +109,45 @@ class FDevice(FWidgetOperatorMixIn):
         self.mnc.export_screen(final_path)
         logger.debug('Screenshot saved in [{}]'.format(final_path))
         return final_path
+
+    def find_target(self,
+                    target_path: typing.Union[str, list, tuple],
+                    save_pic: str = None) -> typing.Union[list, None]:
+        """ find target pic in screen, and get widget list (or None) """
+        pic_path = self.screen_shot()
+
+        if isinstance(target_path, str):
+            target_path = [target_path]
+
+        try:
+            result_dict = detector.detect(target_path, pic_path)
+            logger.info(f'detector result: {result_dict}')
+            assert result_dict.values()
+
+            result_list = list()
+            for each_target_name, each_target_result in result_dict.items():
+                each_target = FWidget(each_target_name, each_target_result)
+                result_list.append(each_target)
+
+        except AssertionError as e:
+            if config.STRICT_MODE:
+                raise e
+
+            # if not found, return None
+            return None
+        else:
+            return result_list
+        finally:
+            # always clean temp pictures
+            if save_pic:
+                shutil.copy(pic_path, save_pic)
+            os.remove(pic_path)
+
+    def find_first_target(self, *args, **kwargs) -> typing.Union[FWidget, None]:
+        target_result_list = self.find_target(*args, **kwargs)
+        if not target_result_list:
+            return None
+        return target_result_list[0]
 
 
 @contextlib.contextmanager
