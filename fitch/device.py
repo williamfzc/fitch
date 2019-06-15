@@ -43,12 +43,12 @@ from adbutils import adb, AdbDevice
 class FWidget(object):
     Point = collections.namedtuple('Point', ['x', 'y'])
 
-    def __init__(self, name: str, position_list: typing.Sequence):
+    def __init__(self, name: str, position: typing.Union[tuple, list]):
         self.name = name
-        self.position_list = [self.Point(*each_position) for each_position in position_list]
+        self.position = self.Point(*position)
 
     def __str__(self):
-        return f'<fitch.device.FWidget object name={self.name} position={self.position_list}>'
+        return f'<fitch.device.FWidget object name={self.name} position={self.position}>'
 
 
 class FDevice(object):
@@ -110,14 +110,11 @@ class FDevice(object):
         logger.debug('Screenshot saved in [{}]'.format(final_path))
         return final_path
 
-    def find_target(self,
-                    target_path: typing.Union[str, list, tuple],
-                    save_pic: str = None) -> typing.Union[list, None]:
-        """ find target pic in screen, and get widget list (or None) """
+    def _find_target(self,
+                     target_path: typing.Union[list, tuple],
+                     save_pic: str = None) -> typing.Union[list, None]:
+        """ base API, should not be directly used I think. find target pic in screen, and get widget list (or None) """
         pic_path = self.screen_shot()
-
-        if isinstance(target_path, str):
-            target_path = [target_path]
 
         try:
             result_dict = detector.detect(target_path, pic_path)
@@ -126,8 +123,10 @@ class FDevice(object):
 
             result_list = list()
             for each_target_name, each_target_result in result_dict.items():
-                each_target = FWidget(each_target_name, each_target_result)
-                result_list.append(each_target)
+                # each target result may contains multi points
+                for each_point in each_target_result:
+                    each_target = FWidget(each_target_name, each_point)
+                    result_list.append(each_target)
 
         except AssertionError as e:
             if config.STRICT_MODE:
@@ -143,11 +142,16 @@ class FDevice(object):
                 shutil.copy(pic_path, save_pic)
             os.remove(pic_path)
 
-    def find_first_target(self, *args, **kwargs) -> typing.Union[FWidget, None]:
-        target_result_list = self.find_target(*args, **kwargs)
+    def get_widget_list(self, target_path: str, *args, **kwargs) -> typing.Union[list, None]:
+        target_path = [target_path]
+
+        target_result_list = self._find_target(target_path, *args, **kwargs)
         if not target_result_list:
             return None
-        return target_result_list[0]
+        return target_result_list
+
+    def get_widget(self, target_path: str, *args, **kwargs) -> typing.Union[FWidget, None]:
+        return self.get_widget_list(target_path, *args, **kwargs)[0]
 
 
 @contextlib.contextmanager
