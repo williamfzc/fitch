@@ -52,12 +52,12 @@ def get_name_from_path(file_path: str) -> str:
     return file_path.split(os.sep)[-1]
 
 
-def detect(template: typing.Sequence, target: str) -> list:
+def detect(template: typing.Sequence, target: str) -> dict:
     """ return a point list """
     result = fi_client.get_target_point_with_path(
         target, template, threshold=config.CV_THRESHOLD)
     logger.debug('Detect result: {}'.format(json.dumps(result)))
-    return result
+    return dict(zip(template, result))
 
 
 if __name__ == '__main__':

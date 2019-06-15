@@ -66,13 +66,15 @@ class ActionPlayer(object):
 
     def fast_swipe(self,
                    point1: (list, tuple),
-                   point2: (list, tuple)):
-        self.swipe(point1, point2, duration=1, part=1)
+                   point2: (list, tuple),
+                   *args, **kwargs):
+        self.swipe(point1, point2, duration=1, part=1, *args, **kwargs)
 
     def slow_swipe(self,
                    point1: (list, tuple),
-                   point2: (list, tuple)):
-        self.swipe(point1, point2, duration=1, part=50)
+                   point2: (list, tuple),
+                   *args, **kwargs):
+        self.swipe(point1, point2, duration=1, part=50, *args, **kwargs)
 
 
 if __name__ == '__main__':
