@@ -27,7 +27,9 @@ import os
 from fitch.device import FDevice, FDeviceManager
 from fitch.logger import logger
 from fitch import config
+import warnings
 
+warnings.warn('fitch.testcase already DEPRECATED!! and should not be used any more :(')
 
 class FPic(object):
     def __init__(self, pic_path: str):
@@ -141,7 +143,7 @@ class FTestCase(unittest.TestCase):
         target_pic_path = cls._format_pic_path(target_pic_path)
         assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
         current_screen_target_path = cls._get_current_screen_target_path(target_pic_path)
-        return cls.f_device.find_target(target_pic_path, save_pic=current_screen_target_path)
+        return cls.f_device._find_target(target_pic_path, save_pic=current_screen_target_path)
 
     @classmethod
     def f_tap_target(cls, target_pic_path: str, duration: int = 100):
