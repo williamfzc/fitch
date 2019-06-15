@@ -142,6 +142,11 @@ class FDevice(object):
                 shutil.copy(pic_path, save_pic)
             os.remove(pic_path)
 
+    # --- user API below ---
+    def get_screen_size(self) -> tuple:
+        """ (width, height) """
+        return self.adb_utils.window_size()
+
     def get_widget_list(self, target_path: str, *args, **kwargs) -> typing.Union[list, None]:
         target_path = [target_path]
 
@@ -152,6 +157,29 @@ class FDevice(object):
 
     def get_widget(self, target_path: str, *args, **kwargs) -> typing.Union[FWidget, None]:
         return self.get_widget_list(target_path, *args, **kwargs)[0]
+
+    def click(self, target_widget: FWidget):
+        self.player.short_tap(target_widget.position)
+
+    def long_click(self, target_widget: FWidget):
+        self.player.long_tap(target_widget.position)
+
+    def drag_and_drop(self, widget_1: FWidget, widget_2: FWidget):
+        self.player.long_tap(widget_1.position, no_up=True)
+        self.player.fast_swipe(widget_1.position, widget_2.position, no_down=True)
+
+    def swipe_screen(self, start: str, end: str):
+        """ use 'w', 's', 'a', 'd' and 'c' (center) to set the src and dst """
+        width, height = self.get_screen_size()
+        point_dict = {
+            'w': (width / 2, 0),
+            's': (width / 2, height),
+            'a': (0, height / 2),
+            'd': (width, height / 2),
+            'c': (width / 2, height / 2),
+        }
+        assert (start in point_dict) and (end in point_dict), 'start and end should be selected from: [w, s, a, d, c]'
+        self.player.fast_swipe(point_dict[start], point_dict[end])
 
 
 @contextlib.contextmanager

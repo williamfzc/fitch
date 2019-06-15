@@ -52,9 +52,9 @@ class ActionPlayer(object):
               no_up: bool=None):
 
         if not duration:
-            duration = 1
+            duration = 5
         if not part:
-            part = 20
+            part = 50
 
         self.mnt.ext_smooth_swipe(
             [point1, point2],
@@ -68,13 +68,13 @@ class ActionPlayer(object):
                    point1: (list, tuple),
                    point2: (list, tuple),
                    *args, **kwargs):
-        self.swipe(point1, point2, duration=1, part=1, *args, **kwargs)
+        self.swipe(point1, point2, duration=5, part=100, *args, **kwargs)
 
     def slow_swipe(self,
                    point1: (list, tuple),
                    point2: (list, tuple),
                    *args, **kwargs):
-        self.swipe(point1, point2, duration=1, part=50, *args, **kwargs)
+        self.swipe(point1, point2, duration=50, part=100, *args, **kwargs)
 
 
 if __name__ == '__main__':
