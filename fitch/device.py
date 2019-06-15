@@ -156,7 +156,10 @@ class FDevice(object):
         return target_result_list
 
     def get_widget(self, target_path: str, *args, **kwargs) -> typing.Union[FWidget, None]:
-        return self.get_widget_list(target_path, *args, **kwargs)[0]
+        widget_list = self.get_widget_list(target_path, *args, **kwargs)
+        if not widget_list:
+            return None
+        return widget_list[0]
 
     def click(self, target_widget: FWidget):
         self.player.short_tap(target_widget.position)
