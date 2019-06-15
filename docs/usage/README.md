@@ -1,5 +1,9 @@
 # 使用
 
+## 一个完整的例子
+
+我觉得这个例子可以解决大多数问题：[sample.py](https://github.com/williamfzc/fitch/blob/master/sample/sample.py)
+
 ## 创建与销毁
 
 FDevice的使用有两种方式。如果只是简单功能，你可以选择with。它会在使用结束后自动销毁设备：
@@ -115,7 +119,3 @@ device.extras.switch_airplane(True)
 ```
 
 可以通过 extras 调用 [adbutils](https://github.com/openatx/adbutils) 中的功能。
-
-## 一个完整的例子
-
-可以参考 [sample.py](https://github.com/williamfzc/fitch/blob/master/sample/sample.py)

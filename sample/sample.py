@@ -1,6 +1,7 @@
 from fitch import config
 from fitch.utils import restart_adb
 import os
+import time
 
 # 重启adb服务，这里只是为了清理一下遗留进程，正式环境可以不需要
 restart_adb()
@@ -46,6 +47,11 @@ print(operator_result)
 # 可以在此基础上自由构建更高级别的API
 # 可参见 https://github.com/williamfzc/pyminitouch
 device.player.fast_swipe([100, 100], [400, 400])
+
+# 除了UI操作，你还可以利用 adbutils 进行方便的adb操作
+# 可参见 https://github.com/openatx/adbutils
+device.extras.keyevent(3)
+time.sleep(2)
 
 # 在完成后记得停止设备
 device.stop()
