@@ -11,6 +11,7 @@ setup(
     install_requires=[
         'pyminitouch',
         'findit',
+        'findit_client',
         'fastcap',
         'pyatool',
         'loguru',
