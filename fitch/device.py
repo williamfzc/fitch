@@ -184,6 +184,30 @@ class FDevice(object):
         assert (start in point_dict) and (end in point_dict), 'start and end should be selected from: [w, s, a, d, c]'
         self.player.fast_swipe(point_dict[start], point_dict[end])
 
+    def get_ocr_text(self, **extra_args) -> list:
+        pic_path = self.screen_shot()
+        resp = detector.fi_client.analyse_with_path(
+            pic_path,
+            '',
+            engine=['ocr'],
+            **extra_args)
+        result_text_list = resp.ocr_engine.get_text()
+        logger.debug(f'Detect text: {result_text_list}')
+        os.remove(pic_path)
+        return result_text_list
+
+    def get_ssim(self, template_name_list: typing.Union[list, tuple], **extra_args) -> typing.Dict[str, float]:
+        pic_path = self.screen_shot()
+        template_name = ','.join(template_name_list)
+        resp = detector.fi_client.analyse_with_path(pic_path, template_name, engine=['sim'], **extra_args)
+
+        ssim_dict = dict()
+        for each_template_name in template_name_list:
+            ssim = resp.sim_engine.get_sim(each_template_name)
+            ssim_dict[each_template_name] = ssim
+            logger.debug(f'Compared with {each_template_name}: {ssim}')
+        return ssim_dict
+
 
 @contextlib.contextmanager
 def safe_device(device_id: str) -> FDevice:
