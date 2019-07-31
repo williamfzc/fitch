@@ -14,7 +14,8 @@ COPY . .
 
 # init adb (adb always fails at the first time)
 RUN adb start-server || echo "init adb" \
-    && pip install .
+    && pip install . \
+    && pip install --no-cache-dir html-testRunner
 
 # start testing
 WORKDIR /usr/src/app
