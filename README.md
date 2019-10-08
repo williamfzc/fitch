@@ -1,4 +1,4 @@
-<h1 align="center">FITCH</h1>
+<h1 align="center">FITCH = Fi(nd) & T(ou)ch</h1>
 <p align="center">
     <em>基于 opencv 的 Android UI自动化解决方案</em>
 </p>

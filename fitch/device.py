@@ -23,12 +23,13 @@ SOFTWARE.
 """
 import tempfile
 import os
-import shutil
 import uuid
 import atexit
 import contextlib
 import typing
 import collections
+import numpy as np
+import cv2
 
 from fitch.utils import is_device_connected
 from fitch.player import ActionPlayer
@@ -93,7 +94,7 @@ class FDevice(object):
         self.stop()
         self.start()
 
-    def screen_shot(self, save_to=None) -> str:
+    def screen_shot(self, save_to: str = None) -> str:
         """ screen shot and return its path (YOU SHOULD REMOVE IT BY YOURSELF!) """
         self.mnc.screen_shot()
 
@@ -114,14 +115,22 @@ class FDevice(object):
         logger.debug("Screenshot saved in [{}]".format(final_path))
         return final_path
 
+    def screen_shot_to_object(self) -> np.ndarray:
+        """ screen shot and return numpy array (data saved in memory) """
+        pic_path = self.screen_shot()
+        # temp file will be automatically removed after usage
+        data = cv2.imread(pic_path, cv2.COLOR_RGB2GRAY)
+        os.remove(pic_path)
+        return data
+
     def _find_target(
         self, target_path: typing.Union[list, tuple], save_pic: str = None
     ) -> typing.Union[list, None]:
         """ base API, should not be directly used I think. find target pic in screen, and get widget list (or None) """
-        pic_path = self.screen_shot()
+        p = self.screen_shot_to_object()
 
         try:
-            result_dict = detector.detect(target_path, pic_path)
+            result_dict = detector.detect(target_path, p)
             logger.info(f"detector result: {result_dict}")
             assert result_dict.values()
 
@@ -143,13 +152,15 @@ class FDevice(object):
         finally:
             # always clean temp pictures
             if save_pic:
-                shutil.copy(pic_path, save_pic)
-            os.remove(pic_path)
+                cv2.imwrite(save_pic, p)
 
     # --- user API below ---
     def get_screen_size(self) -> tuple:
         """ (width, height) """
         return self.adb_utils.window_size()
+
+    # alias
+    get_width_and_height = get_screen_size
 
     def get_widget_list(
         self, target_path: str, *args, **kwargs
@@ -195,22 +206,21 @@ class FDevice(object):
         self.player.fast_swipe(point_dict[start], point_dict[end])
 
     def get_ocr_text(self, **extra_args) -> list:
-        pic_path = self.screen_shot()
-        resp = detector.fi_client.analyse_with_path(
-            pic_path, "", engine=["ocr"], **extra_args
+        p = self.screen_shot_to_object()
+        resp = detector.fi_client.analyse_with_object(
+            p, "", engine=["ocr"], **extra_args
         )
         result_text_list = resp.ocr_engine.get_text()
         logger.debug(f"Detect text: {result_text_list}")
-        os.remove(pic_path)
         return result_text_list
 
     def get_ssim(
         self, template_name_list: typing.Union[list, tuple], **extra_args
     ) -> typing.Dict[str, float]:
-        pic_path = self.screen_shot()
+        p = self.screen_shot_to_object()
         template_name = ",".join(template_name_list)
-        resp = detector.fi_client.analyse_with_path(
-            pic_path, template_name, engine=["sim"], **extra_args
+        resp = detector.fi_client.analyse_with_object(
+            p, template_name, engine=["sim"], **extra_args
         )
 
         ssim_dict = dict()

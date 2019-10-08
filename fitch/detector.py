@@ -24,6 +24,7 @@ SOFTWARE.
 import json
 import typing
 import os
+import numpy as np
 
 from findit_client import FindItStandardClient
 from loguru import logger
@@ -51,11 +52,16 @@ def get_name_from_path(file_path: str) -> str:
     return file_path.split(os.sep)[-1]
 
 
-def detect(template: typing.Sequence, target: str) -> dict:
+def detect(template: typing.Sequence, target: typing.Union[str, np.ndarray]) -> typing.Dict[str, typing.List]:
     """ return a point list """
-    result = fi_client.get_target_point_with_path(
-        target, template, threshold=config.CV_THRESHOLD
-    )
+    if isinstance(target, str):
+        f = fi_client.get_target_point_with_path
+    elif isinstance(target, np.ndarray):
+        f = fi_client.get_target_point_with_object
+    else:
+        raise TypeError(f"error type of target: {type(target)}")
+
+    result = f(target, template, threshold=config.CV_THRESHOLD)
     logger.debug("Detect result: {}".format(json.dumps(result)))
     return dict(zip(template, result))
 
