@@ -39,13 +39,13 @@ from fastcap import MNCDevice
 from pyatool import PYAToolkit
 from adbutils import adb, AdbDevice
 
+Point = collections.namedtuple('Point', ['x', 'y'])
+
 
 class FWidget(object):
-    Point = collections.namedtuple('Point', ['x', 'y'])
-
     def __init__(self, name: str, position: typing.Union[tuple, list]):
         self.name = name
-        self.position = self.Point(*position)
+        self.position = Point(*position)
 
     def __str__(self):
         return f'<fitch.device.FWidget object name={self.name} position={self.position}>'
