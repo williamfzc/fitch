@@ -230,6 +230,12 @@ class FDevice(object):
             logger.debug(f"Compared with {each_template_name}: {ssim}")
         return ssim_dict
 
+    def get_interest_point_list(self, *args, **kwargs) -> typing.List[cv2.KeyPoint]:
+        """ find key points with ORB engine """
+        p = self.screen_shot_to_object()
+        orb = cv2.ORB_create(*args, **kwargs)
+        return orb.detect(p, None)
+
 
 @contextlib.contextmanager
 def safe_device(device_id: str) -> FDevice:
