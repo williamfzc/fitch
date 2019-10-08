@@ -30,8 +30,8 @@ from loguru import logger
 
 from fitch import config
 
-TEMP_TEMPLATE_NAME = 'cur_template'
-TEMP_TARGET_NAME = 'cur_target'
+TEMP_TEMPLATE_NAME = "cur_template"
+TEMP_TARGET_NAME = "cur_target"
 
 fi_client = FindItStandardClient(
     host=config.FINDIT_SERVER_IP,
@@ -39,9 +39,8 @@ fi_client = FindItStandardClient(
     local_mode=not config.REMOTE_MODE,
     pic_root=config.DEFAULT_LOCAL_PIC_DIR,
     python_path=config.DEFAULT_PYTHON_EXECUTOR,
-
     # extra args
-    engine=['template'],
+    engine=["template"],
     engine_template_cv_method_name=config.CV_METHOD_NAME,
     engine_template_scale=config.CV_PIC_SCALE,
     pro_mode=True,
@@ -55,11 +54,12 @@ def get_name_from_path(file_path: str) -> str:
 def detect(template: typing.Sequence, target: str) -> dict:
     """ return a point list """
     result = fi_client.get_target_point_with_path(
-        target, template, threshold=config.CV_THRESHOLD)
-    logger.debug('Detect result: {}'.format(json.dumps(result)))
+        target, template, threshold=config.CV_THRESHOLD
+    )
+    logger.debug("Detect result: {}".format(json.dumps(result)))
     return dict(zip(template, result))
 
 
-if __name__ == '__main__':
-    res = detect('../point.png', '../screen.png')
+if __name__ == "__main__":
+    res = detect("../point.png", "../screen.png")
     print(res)

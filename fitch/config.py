@@ -31,19 +31,19 @@ PROJECT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 # system
 # 'Linux', 'Windows' or 'Darwin'.
 SYSTEM_NAME = platform.system()
-NEED_SHELL = SYSTEM_NAME != 'Windows'
-ADB_EXECUTOR = 'adb'
+NEED_SHELL = SYSTEM_NAME != "Windows"
+ADB_EXECUTOR = "adb"
 
 # strict mode
 # setting this True, fitch will not catch error.
 STRICT_MODE = False
 
 # encoding
-DEFAULT_CHARSET = 'utf-8'
+DEFAULT_CHARSET = "utf-8"
 
 # detector cv method
 # SQDIFF is not supported now ( it takes min value, but default is max value. )
-CV_METHOD_NAME = 'cv2.TM_CCOEFF_NORMED'
+CV_METHOD_NAME = "cv2.TM_CCOEFF_NORMED"
 CV_THRESHOLD = 0.8
 
 # 图像模板的缩放范围
@@ -51,9 +51,9 @@ CV_THRESHOLD = 0.8
 CV_PIC_SCALE = (0.5, 3, 10)
 
 # findit relative
-FINDIT_SERVER_IP = '127.0.0.1'
+FINDIT_SERVER_IP = "127.0.0.1"
 FINDIT_SERVER_PORT = 9410
 REMOTE_MODE = False
 
-DEFAULT_PYTHON_EXECUTOR = 'python'
-DEFAULT_LOCAL_PIC_DIR = '.'
+DEFAULT_PYTHON_EXECUTOR = "python"
+DEFAULT_LOCAL_PIC_DIR = "."

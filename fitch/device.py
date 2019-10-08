@@ -39,7 +39,7 @@ from fastcap import MNCDevice
 from pyatool import PYAToolkit
 from adbutils import adb, AdbDevice
 
-Point = collections.namedtuple('Point', ['x', 'y'])
+Point = collections.namedtuple("Point", ["x", "y"])
 
 
 class FWidget(object):
@@ -48,20 +48,24 @@ class FWidget(object):
         self.position = Point(*position)
 
     def __str__(self):
-        return f'<fitch.device.FWidget object name={self.name} position={self.position}>'
+        return (
+            f"<fitch.device.FWidget object name={self.name} position={self.position}>"
+        )
 
 
 class FDevice(object):
     """ device object, and high level API """
 
     def __init__(self, device_id: str):
-        assert is_device_connected(device_id), 'device {} not connected'.format(device_id)
+        assert is_device_connected(device_id), "device {} not connected".format(
+            device_id
+        )
         self.device_id: str = device_id
 
-        self.mnc: MNCDevice = None
-        self.player: ActionPlayer = None
-        self.toolkit: PYAToolkit = None
-        self.adb_utils: AdbDevice = None
+        self.mnc: typing.Optional[MNCDevice] = None
+        self.player: typing.Optional[ActionPlayer] = None
+        self.toolkit: typing.Optional[PYAToolkit] = None
+        self.adb_utils: typing.Optional[AdbDevice] = None
 
         self.start()
 
@@ -72,7 +76,7 @@ class FDevice(object):
         self.toolkit = PYAToolkit(self.device_id)
         self.adb_utils = adb.device(serial=self.device_id)
 
-        logger.debug('FDevice [{}] started'.format(self.device_id))
+        logger.debug("FDevice [{}] started".format(self.device_id))
 
     def stop(self):
         """ stop device, and clean up """
@@ -82,7 +86,7 @@ class FDevice(object):
         self.player = None
         self.toolkit = None
 
-        logger.debug('FDevice [{}] stopped'.format(self.device_id))
+        logger.debug("FDevice [{}] stopped".format(self.device_id))
 
     def reset(self):
         """ stop and restart device """
@@ -96,29 +100,29 @@ class FDevice(object):
         # save to specific place
         if save_to:
             if os.path.isdir(save_to):
-                pic_name = '{}.png'.format(uuid.uuid1())
+                pic_name = "{}.png".format(uuid.uuid1())
                 final_path = os.path.join(save_to, pic_name)
             else:
                 final_path = save_to
         # use tempfile
         else:
-            temp_pic = tempfile.NamedTemporaryFile('w+', delete=False, suffix='.png')
+            temp_pic = tempfile.NamedTemporaryFile("w+", delete=False, suffix=".png")
             temp_pic_name = temp_pic.name
             final_path = temp_pic_name
 
         self.mnc.export_screen(final_path)
-        logger.debug('Screenshot saved in [{}]'.format(final_path))
+        logger.debug("Screenshot saved in [{}]".format(final_path))
         return final_path
 
-    def _find_target(self,
-                     target_path: typing.Union[list, tuple],
-                     save_pic: str = None) -> typing.Union[list, None]:
+    def _find_target(
+        self, target_path: typing.Union[list, tuple], save_pic: str = None
+    ) -> typing.Union[list, None]:
         """ base API, should not be directly used I think. find target pic in screen, and get widget list (or None) """
         pic_path = self.screen_shot()
 
         try:
             result_dict = detector.detect(target_path, pic_path)
-            logger.info(f'detector result: {result_dict}')
+            logger.info(f"detector result: {result_dict}")
             assert result_dict.values()
 
             result_list = list()
@@ -147,7 +151,9 @@ class FDevice(object):
         """ (width, height) """
         return self.adb_utils.window_size()
 
-    def get_widget_list(self, target_path: str, *args, **kwargs) -> typing.Union[list, None]:
+    def get_widget_list(
+        self, target_path: str, *args, **kwargs
+    ) -> typing.Union[list, None]:
         target_path = [target_path]
 
         target_result_list = self._find_target(target_path, *args, **kwargs)
@@ -155,7 +161,9 @@ class FDevice(object):
             return None
         return target_result_list
 
-    def get_widget(self, target_path: str, *args, **kwargs) -> typing.Union[FWidget, None]:
+    def get_widget(
+        self, target_path: str, *args, **kwargs
+    ) -> typing.Union[FWidget, None]:
         widget_list = self.get_widget_list(target_path, *args, **kwargs)
         if not widget_list:
             return None
@@ -175,37 +183,41 @@ class FDevice(object):
         """ use 'w', 's', 'a', 'd' and 'c' (center) to set the src and dst """
         width, height = self.get_screen_size()
         point_dict = {
-            'w': (width / 2, 0),
-            's': (width / 2, height),
-            'a': (0, height / 2),
-            'd': (width, height / 2),
-            'c': (width / 2, height / 2),
+            "w": (width / 2, 0),
+            "s": (width / 2, height),
+            "a": (0, height / 2),
+            "d": (width, height / 2),
+            "c": (width / 2, height / 2),
         }
-        assert (start in point_dict) and (end in point_dict), 'start and end should be selected from: [w, s, a, d, c]'
+        assert (start in point_dict) and (
+            end in point_dict
+        ), "start and end should be selected from: [w, s, a, d, c]"
         self.player.fast_swipe(point_dict[start], point_dict[end])
 
     def get_ocr_text(self, **extra_args) -> list:
         pic_path = self.screen_shot()
         resp = detector.fi_client.analyse_with_path(
-            pic_path,
-            '',
-            engine=['ocr'],
-            **extra_args)
+            pic_path, "", engine=["ocr"], **extra_args
+        )
         result_text_list = resp.ocr_engine.get_text()
-        logger.debug(f'Detect text: {result_text_list}')
+        logger.debug(f"Detect text: {result_text_list}")
         os.remove(pic_path)
         return result_text_list
 
-    def get_ssim(self, template_name_list: typing.Union[list, tuple], **extra_args) -> typing.Dict[str, float]:
+    def get_ssim(
+        self, template_name_list: typing.Union[list, tuple], **extra_args
+    ) -> typing.Dict[str, float]:
         pic_path = self.screen_shot()
-        template_name = ','.join(template_name_list)
-        resp = detector.fi_client.analyse_with_path(pic_path, template_name, engine=['sim'], **extra_args)
+        template_name = ",".join(template_name_list)
+        resp = detector.fi_client.analyse_with_path(
+            pic_path, template_name, engine=["sim"], **extra_args
+        )
 
         ssim_dict = dict()
         for each_template_name in template_name_list:
             ssim = resp.sim_engine.get_sim(each_template_name)
             ssim_dict[each_template_name] = ssim
-            logger.debug(f'Compared with {each_template_name}: {ssim}')
+            logger.debug(f"Compared with {each_template_name}: {ssim}")
         return ssim_dict
 
 
@@ -227,17 +239,17 @@ class FDeviceManager(object):
         if not cls.is_device_available(target_device_id):
             new_device = FDevice(target_device_id)
             cls._device_dict[target_device_id] = new_device
-            logger.debug('Device [{}] register finished'.format(target_device_id))
+            logger.debug(f"Device [{target_device_id}] register finished")
             return new_device
 
         # or, reuse old device
-        logger.debug('Device [{}] already registered, reuse'.format(target_device_id))
+        logger.debug(f"Device [{target_device_id}] already registered, reuse")
         return cls._device_dict[target_device_id]
 
     @classmethod
     def remove(cls, target_device_id: str):
         if not cls.is_device_available(target_device_id):
-            logger.warning('DEVICE [{}] NOT EXISTED')
+            logger.warning(f"DEVICE [{target_device_id}] NOT EXISTED")
             return
         target_device = cls._device_dict[target_device_id]
         target_device.stop()
@@ -257,9 +269,9 @@ class FDeviceManager(object):
 # TODO auto-kill or managed by developer?
 atexit.register(FDeviceManager.clean)
 
-if __name__ == '__main__':
-    with safe_device('3d33076e') as d:
-        d.screen_shot('../docs')
+if __name__ == "__main__":
+    with safe_device("3d33076e") as d:
+        d.screen_shot("../docs")
 
     # normal way
     # d = FDevice('3d33076e')

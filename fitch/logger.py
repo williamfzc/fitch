@@ -34,18 +34,18 @@ logger.add(sys.stderr, level="DEBUG")
 
 # save log to file
 # create log dir
-log_dir = os.path.join(os.getcwd(), 'log')
+log_dir = os.path.join(os.getcwd(), "log")
 os.makedirs(log_dir, exist_ok=True)
 
 # build random char (length is 4)
-random_char = ''.join(random.sample(string.ascii_letters + string.digits, 4))
+random_char = "".join(random.sample(string.ascii_letters + string.digits, 4))
 # build timestamp
 timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
 # save entire log to file
-log_file = os.path.join(log_dir, 'fitch_{}_{}.log'.format(timestamp, random_char))
+log_file = os.path.join(log_dir, "fitch_{}_{}.log".format(timestamp, random_char))
 logger.add(log_file, level="DEBUG")
 
 # ignore the third-party library by default
-logger.disable('pyminitouch')
-logger.disable('fastcap')
+logger.disable("pyminitouch")
+logger.disable("fastcap")

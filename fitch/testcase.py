@@ -29,17 +29,18 @@ from fitch.logger import logger
 from fitch import config
 import warnings
 
-warnings.warn('fitch.testcase already DEPRECATED!! and should not be used any more :(')
+warnings.warn("fitch.testcase already DEPRECATED!! and should not be used any more :(")
+
 
 class FPic(object):
     def __init__(self, pic_path: str):
         # /path/to/pic/pic1.png
         self.path = pic_path
-        assert self.is_existed(), '{} not existed'.format(pic_path)
+        assert self.is_existed(), "{} not existed".format(pic_path)
         # pic1.png
         self.file_name = pic_path.split(os.sep)[-1]
         # pic1
-        self.name = self.file_name.split('.')[0]
+        self.name = self.file_name.split(".")[0]
 
     def is_existed(self):
         return bool(os.path.isfile(self.path))
@@ -56,16 +57,20 @@ class FPicStore(object):
             return self.f_pic_dict[item].path
         if config.REMOTE_MODE:
             return item
-        raise FileNotFoundError('picture {} file not found'.format(item))
+        raise FileNotFoundError("picture {} file not found".format(item))
 
     def load(self, pic_dir_path):
-        assert os.path.isdir(pic_dir_path), '{} not a dir'.format(pic_dir_path)
+        assert os.path.isdir(pic_dir_path), "{} not a dir".format(pic_dir_path)
 
-        for each_pic_path in [os.path.join(pic_dir_path, i) for i in os.listdir(pic_dir_path)]:
+        for each_pic_path in [
+            os.path.join(pic_dir_path, i) for i in os.listdir(pic_dir_path)
+        ]:
             each_f_pic = FPic(each_pic_path)
             each_pic_name = each_f_pic.name
             self.f_pic_dict[each_pic_name] = each_f_pic
-            logger.debug('Load picture [{}] from [{}]'.format(each_pic_name, each_pic_path))
+            logger.debug(
+                "Load picture [{}] from [{}]".format(each_pic_name, each_pic_path)
+            )
 
 
 class FTestCase(unittest.TestCase):
@@ -73,6 +78,7 @@ class FTestCase(unittest.TestCase):
     Based on unittest.TestCase.
     Can be easily used by other modules, which supports unittest.
     """
+
     f_device_id: str = None
     f_device: FDevice = None
 
@@ -94,7 +100,7 @@ class FTestCase(unittest.TestCase):
 
         if cls.f_runtime_pic_dir_path is not None:
             cls.f_save_runtime_pic(cls.f_runtime_pic_dir_path)
-        logger.debug('Case [{}] setup finished'.format(cls.__name__))
+        logger.debug("Case [{}] setup finished".format(cls.__name__))
 
     @classmethod
     def tearDownClass(cls):
@@ -102,7 +108,7 @@ class FTestCase(unittest.TestCase):
             cls.f_stop_device()
             cls.f_device = None
         cls.f_device_id = None
-        logger.debug('Case [{}] teardown finished'.format(cls.__name__))
+        logger.debug("Case [{}] teardown finished".format(cls.__name__))
 
     @classmethod
     def f_save_runtime_pic(cls, target_dir_path: str):
@@ -123,11 +129,15 @@ class FTestCase(unittest.TestCase):
     @classmethod
     def f_init_device(cls, device_id: str) -> FDevice:
         """ init device, and return it """
-        assert cls.f_device_id, 'should set your device id first, likes `cls.f_device_id="1234F"`'
-        assert not cls.f_device, 'device {} already existed, should not be re-init'.format(device_id)
+        assert (
+            cls.f_device_id
+        ), 'should set your device id first, likes `cls.f_device_id="1234F"`'
+        assert (
+            not cls.f_device
+        ), "device {} already existed, should not be re-init".format(device_id)
 
         cls.f_device = FDeviceManager.add(device_id)
-        logger.debug('Device [{}] init finished'.format(device_id))
+        logger.debug("Device [{}] init finished".format(device_id))
         return cls.f_device
 
     @classmethod
@@ -135,32 +145,44 @@ class FTestCase(unittest.TestCase):
         """ stop device after usage """
         cls.f_device = None
         FDeviceManager.remove(cls.f_device_id)
-        logger.debug('Device [{}] stopped'.format(cls.f_device_id))
+        logger.debug("Device [{}] stopped".format(cls.f_device_id))
 
     @classmethod
     def f_find_target(cls, target_pic_path: str) -> (list, tuple):
         """ find target, and get its position """
         target_pic_path = cls._format_pic_path(target_pic_path)
-        assert cls.f_device, 'device not found, init it first, likes `cls.f_device_id="1234F"`'
-        current_screen_target_path = cls._get_current_screen_target_path(target_pic_path)
-        return cls.f_device._find_target(target_pic_path, save_pic=current_screen_target_path)
+        assert (
+            cls.f_device
+        ), 'device not found, init it first, likes `cls.f_device_id="1234F"`'
+        current_screen_target_path = cls._get_current_screen_target_path(
+            target_pic_path
+        )
+        return cls.f_device._find_target(
+            target_pic_path, save_pic=current_screen_target_path
+        )
 
     @classmethod
     def f_tap_target(cls, target_pic_path: str, duration: int = 100):
         """ find target, get its position, and tap it """
         target_pic_path = cls._format_pic_path(target_pic_path)
-        current_screen_target_path = cls._get_current_screen_target_path(target_pic_path)
-        return cls.f_device.tap_target(target_pic_path, duration, save_pic=current_screen_target_path)
+        current_screen_target_path = cls._get_current_screen_target_path(
+            target_pic_path
+        )
+        return cls.f_device.tap_target(
+            target_pic_path, duration, save_pic=current_screen_target_path
+        )
 
     @classmethod
     def f_snapshot(cls, name: str = None) -> str:
         """ take a screen shot and do nothing, for checking after test. """
-        assert cls.f_runtime_pic_dir_path is not None, 'set f_runtime_pic_dir_path first'
+        assert (
+            cls.f_runtime_pic_dir_path is not None
+        ), "set f_runtime_pic_dir_path first"
 
         # specific name
         if name:
             # add suffix: '.png'
-            pic_suffix = '.png'
+            pic_suffix = ".png"
             if not name.endswith(pic_suffix):
                 name += pic_suffix
             pic_path = os.path.join(cls.f_runtime_pic_dir_path, name)
@@ -168,7 +190,7 @@ class FTestCase(unittest.TestCase):
         else:
             pic_path = cls.f_runtime_pic_dir_path
 
-        logger.info('Snapshot saved in [{}]'.format(pic_path))
+        logger.info("Snapshot saved in [{}]".format(pic_path))
         cls.f_device.screen_shot(save_to=pic_path)
         return pic_path
 
@@ -191,23 +213,23 @@ class FTestCase(unittest.TestCase):
                 self.f_tap_target('x')
                 time.sleep(2)
         """
-        logger.warning('FUNCTION f_reset NOT IMPLEMENTED NOW')
+        logger.warning("FUNCTION f_reset NOT IMPLEMENTED NOW")
 
     @classmethod
     def _format_pic_path(cls, pic_path: str):
         """ try to load picture from pic_store, if pic_path is invalid """
         # support using name directly
         if not os.path.isfile(pic_path):
-            if hasattr(cls, 'f_pic_store'):
+            if hasattr(cls, "f_pic_store"):
                 return getattr(cls.f_pic_store, pic_path)
-            raise FileNotFoundError('PICTURE [{}] NOT FOUND'.format(pic_path))
+            raise FileNotFoundError("PICTURE [{}] NOT FOUND".format(pic_path))
         # do nothing if existed
         return pic_path
 
     @classmethod
     def _get_current_screen_target_path(cls, target_pic_path: str):
         """ get basename of target_pic_path, and generate target path of current screenshot """
-        new_pic_name = '{}_{}'.format(cls.__name__, os.path.basename(target_pic_path))
+        new_pic_name = "{}_{}".format(cls.__name__, os.path.basename(target_pic_path))
         if cls.f_runtime_pic_dir_path:
             return os.path.join(cls.f_runtime_pic_dir_path, new_pic_name)
         return None

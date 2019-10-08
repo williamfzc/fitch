@@ -26,6 +26,7 @@ from pyminitouch import MNTDevice, CommandBuilder
 
 class ActionPlayer(object):
     """ base, low level API here """
+
     def __init__(self, device_id: str):
         self.device_id = device_id
         self.mnt = MNTDevice(device_id)
@@ -43,13 +44,15 @@ class ActionPlayer(object):
     def long_tap(self, point: (list, tuple), *args, **kwargs):
         self.tap(point, duration=1000, *args, **kwargs)
 
-    def swipe(self,
-              point1: (list, tuple),
-              point2: (list, tuple),
-              duration: int = None,
-              part: int = None,
-              no_down: bool=None,
-              no_up: bool=None):
+    def swipe(
+        self,
+        point1: (list, tuple),
+        point2: (list, tuple),
+        duration: int = None,
+        part: int = None,
+        no_down: bool = None,
+        no_up: bool = None,
+    ):
 
         if not duration:
             duration = 5
@@ -57,27 +60,17 @@ class ActionPlayer(object):
             part = 50
 
         self.mnt.ext_smooth_swipe(
-            [point1, point2],
-            duration=duration,
-            part=part,
-            no_down=no_down,
-            no_up=no_up,
+            [point1, point2], duration=duration, part=part, no_down=no_down, no_up=no_up
         )
 
-    def fast_swipe(self,
-                   point1: (list, tuple),
-                   point2: (list, tuple),
-                   *args, **kwargs):
+    def fast_swipe(self, point1: (list, tuple), point2: (list, tuple), *args, **kwargs):
         self.swipe(point1, point2, duration=5, part=100, *args, **kwargs)
 
-    def slow_swipe(self,
-                   point1: (list, tuple),
-                   point2: (list, tuple),
-                   *args, **kwargs):
+    def slow_swipe(self, point1: (list, tuple), point2: (list, tuple), *args, **kwargs):
         self.swipe(point1, point2, duration=50, part=100, *args, **kwargs)
 
 
-if __name__ == '__main__':
-    ap = ActionPlayer('4df189487c7b6fef')
+if __name__ == "__main__":
+    ap = ActionPlayer("4df189487c7b6fef")
     ap.tap((500, 500))
     ap.stop()
