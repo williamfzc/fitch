@@ -52,7 +52,9 @@ def get_name_from_path(file_path: str) -> str:
     return file_path.split(os.sep)[-1]
 
 
-def detect(template: typing.Sequence, target: typing.Union[str, np.ndarray]) -> typing.Dict[str, typing.List]:
+def detect(
+    template: typing.Sequence, target: typing.Union[str, np.ndarray]
+) -> typing.Dict[str, typing.List]:
     """ return a point list """
     if isinstance(target, str):
         f = fi_client.get_target_point_with_path

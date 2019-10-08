@@ -206,6 +206,7 @@ class FDevice(object):
         self.player.fast_swipe(point_dict[start], point_dict[end])
 
     def get_ocr_text(self, **extra_args) -> list:
+        """ need `findtext` and `tesserocr` installed. https://github.com/sirfz/tesserocr#installation """
         p = self.screen_shot_to_object()
         resp = detector.fi_client.analyse_with_object(
             p, "", engine=["ocr"], **extra_args
