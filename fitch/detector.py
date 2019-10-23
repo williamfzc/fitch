@@ -27,12 +27,16 @@ import os
 import numpy as np
 
 from findit_client import FindItStandardClient
+from findit_client.logger import switch_log
 from loguru import logger
 
 from fitch import config
 
 TEMP_TEMPLATE_NAME = "cur_template"
 TEMP_TARGET_NAME = "cur_target"
+
+# enable findit client logger
+switch_log(True)
 
 fi_client = FindItStandardClient(
     host=config.FINDIT_SERVER_IP,
