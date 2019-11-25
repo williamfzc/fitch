@@ -22,15 +22,62 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 from pyminitouch import MNTDevice, CommandBuilder
+import subprocess
+from loguru import logger
 
 
-class ActionPlayer(object):
+class BasePlayer(object):
+    def stop(self):
+        pass
+
+    def tap(self, point: (list, tuple), duration: int = 100, no_up: bool = None):
+        pass
+
+    def short_tap(self, point: (list, tuple), *args, **kwargs):
+        pass
+
+    def long_tap(self, point: (list, tuple), *args, **kwargs):
+        pass
+
+    def swipe(
+        self,
+        point1: (list, tuple),
+        point2: (list, tuple),
+        duration: int = None,
+        part: int = None,
+        no_down: bool = None,
+        no_up: bool = None,
+    ):
+        pass
+
+    def fast_swipe(self, point1: (list, tuple), point2: (list, tuple), *args, **kwargs):
+        pass
+
+    def slow_swipe(self, point1: (list, tuple), point2: (list, tuple), *args, **kwargs):
+        pass
+
+
+class AdbPlayer(BasePlayer):
+    def __init__(self, device_id: str):
+        self.device_id = device_id
+        self.cmd = ["adb", "-s", device_id, "shell"]
+        logger.info("adb player inited")
+
+    def shell(self, cmd: list):
+        return subprocess.check_call(self.cmd + cmd)
+
+    def tap(self, point: (list, tuple), *_, **__):
+        self.shell(["input", "tap", str(point[0]), str(point[1])])
+
+
+class ActionPlayer(BasePlayer):
     """ base, low level API here """
 
     def __init__(self, device_id: str):
         self.device_id = device_id
         self.mnt = MNTDevice(device_id)
         self.cmd_builder = CommandBuilder()
+        logger.info("action player inited")
 
     def stop(self):
         self.mnt.stop()

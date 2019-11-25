@@ -32,7 +32,7 @@ import numpy as np
 import cv2
 
 from fitch.utils import is_device_connected
-from fitch.player import ActionPlayer
+from fitch.player import ActionPlayer, AdbPlayer
 from fitch import detector, config
 
 from loguru import logger
@@ -57,7 +57,7 @@ class FWidget(object):
 class FDevice(object):
     """ device object, and high level API """
 
-    def __init__(self, device_id: str):
+    def __init__(self, device_id: str, *args, **kwargs):
         assert is_device_connected(device_id), "device {} not connected".format(
             device_id
         )
@@ -68,14 +68,18 @@ class FDevice(object):
         self.toolkit: typing.Optional[PYAToolkit] = None
         self.adb_utils: typing.Optional[AdbDevice] = None
 
-        self.start()
+        self.start(*args, **kwargs)
 
-    def start(self):
+    def start(self, simple_mode: bool = None):
         """ start device """
         self.mnc = MNCDevice(self.device_id)
-        self.player = ActionPlayer(self.device_id)
         self.toolkit = PYAToolkit(self.device_id)
-        self.adb_utils = adb.device(serial=self.device_id)
+
+        if not simple_mode:
+            self.player = ActionPlayer(self.device_id)
+            self.adb_utils = adb.device(serial=self.device_id)
+        else:
+            self.player = AdbPlayer(self.device_id)
 
         logger.debug("FDevice [{}] started".format(self.device_id))
 
